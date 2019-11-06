@@ -59,7 +59,7 @@
                 data: data,
                 success: function (path) {
                     $('#txtImage').val(path);
-                    tedu.notify('Upload image succesful!', 'success');
+                    tedu.notify('Upload image successful!', 'success');
 
                 },
                 error: function () {
@@ -113,6 +113,7 @@
             var id = $('#hidIdM').val();
             var name = $('#txtNameM').val();
             var categoryId = $('#ddlCategoryIdM').combotree('getValue');
+            var image = $('#txtImage').val();
 
             var description = $('#txtDescM').val();
             var tags = $('#txtTagM').val();
@@ -132,7 +133,7 @@
                     Id: id,
                     Name: name,
                     CategoryId: categoryId,
-                    Image: '',
+                    Image: image,
                     Description: description,
                     Content: content,
                     HomeFlag: showHome,
@@ -304,7 +305,7 @@
                     render += Mustache.render(template, {
                         Id: item.Id,
                         Name: item.Name,
-                        Image: item.Image == null ? '<img src="/admin-side/images/user.png" width=25' : '<img src="' + item.Image + '" width=25 />',
+                        Image: item.Image == null ? '<img src="/admin-side/images/user.png" width=25 />' : '<img src="' + item.Image + '" width=25 />',
                         CategoryName: item.BlogCategory.Name,
                         CreatedDate: tedu.dateTimeFormatJson(item.DateCreated),
                         Status: tedu.getStatus(item.Status)
