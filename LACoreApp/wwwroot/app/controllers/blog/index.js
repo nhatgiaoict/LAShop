@@ -7,44 +7,44 @@
     }
 
     function registerEvents() {
-        $('#frmMaintainance').validate({
-            errorClass: 'red',
+        $("#frmMaintenance").validate({
+            errorClass: "red",
             ignore: [],
-            lang: 'vi',
+            lang: "vi",
             rules: {
                 txtNameM: { required: true },
                 ddlCategoryIdM: { required: true },
             }
         });
         //todo: binding events to controls
-        $('#ddlShowPage').on('change', function () {
+        $("#ddlShowPage").on("change", function () {
             tedu.configs.pageSize = $(this).val();
             tedu.configs.pageIndex = 1;
             loadData(true);
         });
 
-        $('#btnSearch').on('click', function () {
+        $("#btnSearch").on("click", function () {
             loadData();
         });
 
-        $('#txtKeyword').on('keypress', function (e) {
+        $("#txtKeyword").on("keypress", function (e) {
             if (e.which === 13) {
                 loadData();
             }
         });
 
-        $("#btnCreate").on('click', function () {
-            resetFormMaintainance();
+        $("#btnCreate").on("click", function () {
+            resetFormMaintenance();
             initTreeDropDownCategory();
-            $('#modal-add-edit').modal('show');
+            $("#modal-add-edit").modal("show");
 
         });
 
-        $('#btnSelectImg').on('click', function () {
-            $('#fileInputImage').click();
+        $("#btnSelectImg").on("click", function () {
+            $("#fileInputImage").click();
         });
 
-        $("#fileInputImage").on('change', function () {
+        $("#fileInputImage").on("change", function () {
             var fileUpload = $(this).get(0);
             var files = fileUpload.files;
             var data = new FormData();
@@ -58,25 +58,25 @@
                 processData: false,
                 data: data,
                 success: function (path) {
-                    $('#txtImage').val(path);
-                    tedu.notify('Upload image successful!', 'success');
+                    $("#txtImage").val(path);
+                    tedu.notify("Upload image successful!", "success");
 
                 },
                 error: function () {
-                    tedu.notify('There was error uploading files!', 'error');
+                    tedu.notify("There was error uploading files!", "error");
                 }
             });
         });
 
-        $('body').on('click', '.btn-edit', function (e) {
+        $("body").on("click", ".btn-edit", function (e) {
             e.preventDefault();
-            var that = $(this).data('id');
+            var that = $(this).data("id");
             loadDetails(that);
         });
 
-        $('body').on('click', '.btn-delete', function (e) {
+        $("body").on("click", ".btn-delete", function (e) {
             e.preventDefault();
-            var that = $(this).data('id');
+            var that = $(this).data("id");
             deleteBlog(that);
         });
 
@@ -87,20 +87,20 @@
     
     }
     function registerControls() {
-        CKEDITOR.replace('txtContent', {});
+        CKEDITOR.replace("txtContent", {});
 
         //Fix: cannot click on element ck in modal
         $.fn.modal.Constructor.prototype.enforceFocus = function () {
             $(document)
-                .off('focusin.bs.modal') // guard against infinite focus loop
-                .on('focusin.bs.modal', $.proxy(function (e) {
+                .off("focusin.bs.modal") // guard against infinite focus loop
+                .on("focusin.bs.modal", $.proxy(function (e) {
                     if (
                         this.$element[0] !== e.target && !this.$element.has(e.target).length
                         // CKEditor compatibility fix start.
-                        && !$(e.target).closest('.cke_dialog, .cke').length
+                        && !$(e.target).closest(".cke_dialog, .cke").length
                         // CKEditor compatibility fix end.
                     ) {
-                        this.$element.trigger('focus');
+                        this.$element.trigger("focus");
                     }
                 }, this));
         };
@@ -108,24 +108,24 @@
     }
 
     function saveBlog(e) {
-        if ($('#frmMaintainance').valid()) {
+        if ($("#frmMaintenance").valid()) {
             e.preventDefault();
-            var id = $('#hidIdM').val();
-            var name = $('#txtNameM').val();
-            var categoryId = $('#ddlCategoryIdM').combotree('getValue');
-            var image = $('#txtImage').val();
+            var id = $("#hidIdM").val();
+            var name = $("#txtNameM").val();
+            var categoryId = $("#ddlCategoryIdM").combotree("getValue");
+            var image = $("#txtImage").val();
 
-            var description = $('#txtDescM').val();
-            var tags = $('#txtTagM').val();
-            var seoKeyword = $('#txtMetakeywordM').val();
-            var seoMetaDescription = $('#txtMetaDescriptionM').val();
-            var seoPageTitle = $('#txtSeoPageTitleM').val();
-            var seoAlias = $('#txtSeoAliasM').val();
+            var description = $("#txtDescM").val();
+            var tags = $("#txtTagM").val();
+            var seoKeyword = $("#txtMetakeywordM").val();
+            var seoMetaDescription = $("#txtMetaDescriptionM").val();
+            var seoPageTitle = $("#txtSeoPageTitleM").val();
+            var seoAlias = $("#txtSeoAliasM").val();
 
             var content = CKEDITOR.instances.txtContent.getData();
-            var status = $('#ckStatusM').prop('checked') == true ? 1 : 0;
-            var hot = $('#ckHotM').prop('checked');
-            var showHome = $('#ckShowHomeM').prop('checked');
+            var status = $("#ckStatusM").prop("checked") === true ? 1 : 0;
+            var hot = $("#ckHotM").prop("checked");
+            var showHome = $("#ckShowHomeM").prop("checked");
             $.ajax({
                 type: "POST",
                 url: "/Admin/Blog/SaveEntity",
@@ -150,14 +150,14 @@
                     tedu.startLoading();
                 },
                 success: function (response) {
-                    tedu.notify('Update blog successful', 'success');
-                    $('#modal-add-edit').modal('hide');
-                    resetFormMaintainance();
+                    tedu.notify("Update blog successful", "success");
+                    $('#modal-add-edit').modal("hide");
+                    resetFormMaintenance();
                     tedu.stopLoading();
                     loadData(true);
                 },
                 error: function () {
-                    tedu.notify('Has an error in save blog progress', 'error');
+                    tedu.notify("Has an error in save blog progress", "error");
                     tedu.stopLoading();
                 }
             });
@@ -250,13 +250,15 @@
             }
         });
     }
-    function resetFormMaintainance() {
+    function resetFormMaintenance() {
         $('#hidIdM').val(0);
         $('#txtNameM').val('');
         initTreeDropDownCategory('');
 
         $('#txtDescM').val('');
         $('#txtTagM').val('');
+        $('#txtImage').val('');
+        $('#txtContent').val('');
         $('#txtMetakeywordM').val('');
         $('#txtMetaDescriptionM').val('');
         $('#txtSeoPageTitleM').val('');

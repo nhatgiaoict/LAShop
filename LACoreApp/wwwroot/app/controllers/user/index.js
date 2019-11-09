@@ -98,7 +98,7 @@
                     if ($(item).prop('checked') === true)
                         roles.push($(item).prop('value'));
                 });
-                var status = $('#ckStatus').prop('checked') === true ? 1 : 0;
+                var status = $('#ckStatus').prop('checked') == true ? 1 : 0;
 
                 $.ajax({
                     type: "POST",

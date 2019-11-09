@@ -25,7 +25,7 @@
         <div class="title_right">
             <div class="col-md-2 col-sm-2 col-xs-12 form-group pull-right top_search">
                 @{
-                    var result = await AuthorizationService.AuthorizeAsync(User, "USER", Operations.Create);
+                    var result = await AuthorizationService.AuthorizeAsync(User, new Guid("1840BD0E-7638-46AE-9A9E-8C34356267DB"), Operations.Create);
                 }
                 @if (result.Succeeded)
                 {
@@ -101,13 +101,13 @@
             <td>{{{DateCreated}}}</td>
             <td>{{{Status}}}</td>
             <td>
-                @if ((await AuthorizationService.AuthorizeAsync(User, "USER", Operations.Update)).Succeeded)
+                @if ((await AuthorizationService.AuthorizeAsync(User, new Guid("1840BD0E-7638-46AE-9A9E-8C34356267DB"), Operations.Update)).Succeeded)
                 {
                     <a href="#" data-id="{{Id}}" class="btn-edit"><i class="fa fa-pencil-square-o"></i></a>
                 }
             </td>
             <td>
-                @if ((await AuthorizationService.AuthorizeAsync(User, "USER", Operations.Delete)).Succeeded)
+                @if ((await AuthorizationService.AuthorizeAsync(User, new Guid("1840BD0E-7638-46AE-9A9E-8C34356267DB"), Operations.Delete)).Succeeded)
                 {
                     <a href="#" data-id="{{Id}}" class="btn-delete"><i class="fa fa-trash-o"></i></a>
 

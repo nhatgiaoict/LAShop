@@ -19,20 +19,23 @@ namespace LACoreApp.Areas.Admin.Controllers
     {
         private readonly IUserService _userService;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IFunctionService _functionService;
         private readonly IHubContext<TeduHub> _hubContext;
 
 
         public UserController(IUserService userService,
             IAuthorizationService authorizationService,
-            IHubContext<TeduHub> hubContext)
+            IHubContext<TeduHub> hubContext,
+            IFunctionService functionService)
         {
             _userService = userService;
             _authorizationService = authorizationService;
             _hubContext = hubContext;
+            _functionService = functionService;
         }
         public async Task<IActionResult> Index()
         {
-            var result = await _authorizationService.AuthorizeAsync(User, "USER", Operations.Read);
+            var result = await _authorizationService.AuthorizeAsync(User, new Guid("1840BD0E-7638-46AE-9A9E-8C34356267DB"), Operations.Read);
             if (result.Succeeded == false)
                 return new RedirectResult("/Admin/Login/Index");
 
