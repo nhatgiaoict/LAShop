@@ -6,7 +6,7 @@
             @foreach (var item in Model.Where(x => x.ParentId == null))
             {
                 <li>
-                    <a><i class="fa @item.IconCss"></i> @item.Name <span class="fa fa-chevron-down"></span></a>
+                    <a><i class="fa @item.IConCss"></i> @item.Name <span class="fa fa-chevron-down"></span></a>
                     @if (Model.Any(x => x.ParentId == item.Id))
                     {
                         <ul class="nav child_menu">

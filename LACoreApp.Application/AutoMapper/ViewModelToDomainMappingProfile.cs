@@ -60,7 +60,7 @@ namespace LACoreApp.Application.AutoMapper
                 .ConstructUsing(c => new AnnouncementUser(c.AnnouncementId, c.UserId, c.HasRead));
 
             CreateMap<FunctionViewModel, Function>()
-                .ConstructUsing(c => new Function(c.Name, c.URL, c.ParentId, c.IconCss, c.SortOrder));
+                .ConstructUsing(c => new Function(c.Name, c.URL, c.ParentId, c.IConCss, c.SortOrder));
 
             CreateMap<BlogViewModel, Blog>().ConstructUsing(c => new Blog(c.Name, c.CategoryId, c.Image, c.Description, c.Content,
                 c.HomeFlag, c.HotFlag, c.Tags, c.Status, c.SeoPageTitle, c.SeoAlias, c.SeoKeywords, c.SeoDescription));
@@ -68,6 +68,9 @@ namespace LACoreApp.Application.AutoMapper
             CreateMap<BlogCategoryViewModel, BlogCategory>().ConstructUsing(c => new BlogCategory(c.Name, c.Description,
                 c.ParentId, c.HomeOrder, c.Image, c.HomeFlag, c.SortOrder, c.Status, c.SeoPageTitle, c.SeoAlias,
                 c.SeoKeywords, c.SeoDescription));
+
+            CreateMap<SlideViewModel, Slide>().ConstructUsing(c =>
+                new Slide(c.Id, c.Name, c.Description, c.Image, c.Url, c.DisplayOrder, c.Status, c.Content));
         }
     }
 }

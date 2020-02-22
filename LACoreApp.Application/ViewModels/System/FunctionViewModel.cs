@@ -19,7 +19,7 @@ namespace LACoreApp.Application.ViewModels.System
 
         public Guid? ParentId { set; get; }
 
-        public string IconCss { get; set; }
+        public string IConCss { get; set; }
         public int SortOrder { set; get; }
         public Status Status { set; get; }
     }

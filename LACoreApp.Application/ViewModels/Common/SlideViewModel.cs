@@ -28,8 +28,8 @@ namespace LACoreApp.Application.ViewModels.Common
 
         public string Content { set; get; }
 
-        [StringLength(25)]
-        [Required]
-        public string GroupAlias { get; set; }
+        //[StringLength(25)]
+        //[Required]
+        //public string GroupAlias { get; set; }
     }
 }

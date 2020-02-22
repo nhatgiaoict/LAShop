@@ -175,7 +175,7 @@ namespace LACoreApp
             services.AddTransient<IPageService, PageService>();
             services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IAnnouncementService, AnnouncementService>();
-
+            services.AddTransient<ISlideService, SlideService>();
             services.AddTransient<IAuthorizationHandler, BaseResourceAuthorizationHandler>();
 
             services.AddSignalR();

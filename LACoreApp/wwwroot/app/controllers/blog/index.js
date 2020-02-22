@@ -178,7 +178,7 @@
                 success: function (response) {
                     tedu.notify('Delete successful', 'success');
                     tedu.stopLoading();
-                    loadData();
+                    loadData(true);
                 },
                 error: function (status) {
                     tedu.notify('Has an error in delete progress', 'error');
@@ -302,25 +302,34 @@
             url: '/admin/blog/GetAllPaging',
             dataType: 'json',
             success: function (response) {
-                console.log(response);
-                $.each(response.Results, function (i, item) {
-                    render += Mustache.render(template, {
-                        Id: item.Id,
-                        Name: item.Name,
-                        Image: item.Image == null ? '<img src="/admin-side/images/user.png" width=25 />' : '<img src="' + item.Image + '" width=25 />',
-                        CategoryName: item.BlogCategory.Name,
-                        CreatedDate: tedu.dateTimeFormatJson(item.DateCreated),
-                        Status: tedu.getStatus(item.Status)
-                    });
+                if (response.RowCount > 0) {
+                    $.each(response.Results,
+                        function(i, item) {
+                            render += Mustache.render(template,
+                                {
+                                    Id: item.Id,
+                                    Name: item.Name,
+                                    Image: item.Image == null
+                                        ? '<img src="/admin-side/images/user.png" width=25 />'
+                                        : '<img src="' + item.Image + '" width=25 />',
+                                    CategoryName: item.BlogCategory.Name,
+                                    CreatedDate: tedu.dateTimeFormatJson(item.DateCreated),
+                                    Status: tedu.getStatus(item.Status)
+                                });
 
-                });
-                $('#lblTotalRecords').text(response.RowCount);
-                if (render != '') {
-                    $('#tbl-content').html(render);
+                        });
+                    $('#lblTotalRecords').text(response.RowCount);
+                    if (render != '') {
+                        $('#tbl-content').html(render);
+                    }
+                    wrapPaging(response.RowCount,
+                        function() {
+                            loadData();
+                        },
+                        isPageChanged);
+                } else {
+                    $('#tbl-content').html('');
                 }
-                wrapPaging(response.RowCount, function () {
-                    loadData();
-                }, isPageChanged);
             },
             error: function (status) {
                 console.log(status);
