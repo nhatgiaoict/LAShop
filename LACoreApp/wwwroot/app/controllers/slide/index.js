@@ -1,5 +1,6 @@
 ﻿var SlideController = function () {
     this.initialize = function () {
+        loadGroups();
         loadData();
         registerEvents();
         registerControls();
@@ -39,6 +40,34 @@
 
         });
 
+        $("#btnSelectImg").on("click", function () {
+            $("#fileInputImage").click();
+        });
+
+        $("#fileInputImage").on("change", function () {
+            var fileUpload = $(this).get(0);
+            var files = fileUpload.files;
+            var data = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                data.append(files[i].name, files[i]);
+            }
+            $.ajax({
+                type: "POST",
+                url: "/Admin/Upload/UploadImage",
+                contentType: false,
+                processData: false,
+                data: data,
+                success: function (path) {
+                    $("#txtImage").val(path);
+                    tedu.notify("Upload image successful!", "success");
+
+                },
+                error: function () {
+                    tedu.notify("There was error uploading files!", "error");
+                }
+            });
+        });
+
         $('body').on('click', '.btn-edit', function (e) {
             e.preventDefault();
             var that = $(this).data('id');
@@ -54,10 +83,12 @@
                     var data = response;
                     $('#hidIdM').val(data.Id);
                     $('#txtNameM').val(data.Name);
+                    $('#ddlGroup').val(data.GroupAlias);
                     $('#txtDisplayOrderM').val(data.DisplayOrder);
+                    $('#txtImage').val(data.Image);
                     $('#txtDescM').val(data.Description);
-                    CKEDITOR.instances.txtContentM.setData(data.Content);
-                    $('#ckStatusM').prop('checked', data.Status === 1);
+                    CKEDITOR.instances.txtContent.setData(data.Content);
+                    $('#ckStatusM').prop('checked', data.Status === true);
 
                     $('#modal-add-edit').modal('show');
                     tedu.stopLoading();
@@ -75,11 +106,12 @@
                 e.preventDefault();
                 var id = $('#hidIdM').val();
                 var name = $('#txtNameM').val();
+                var group = $('#ddlGroup').val();
                 var order = $('#txtDisplayOrderM').val();
                 var image = $("#txtImage").val();
                 var description = $('#txtDescM').val();
-                var content = CKEDITOR.instances.txtContentM.getData();
-                var status = $('#ckStatusM').prop('checked') === true ? 1 : 0;
+                var content = CKEDITOR.instances.txtContent.getData();
+                var status = $('#ckStatusM').prop('checked') === true ? true : false;
 
                 $.ajax({
                     type: "POST",
@@ -87,6 +119,7 @@
                     data: {
                         Id: id,
                         Name: name,
+                        GroupAlias: group,
                         DisplayOrder: order,
                         Image: image,
                         Description: description,
@@ -144,10 +177,11 @@
     function resetFormMaintainance() {
         $('#hidIdM').val(0);
         $('#txtNameM').val('');
+        $('#ddlGroup').val('');
         $('#txtImage').val('');
         $('#txtDisplayOrderM').val('');
         $('#txtDescM').val('');
-        CKEDITOR.instances.txtContentM.setData('');
+        CKEDITOR.instances.txtContent.setData('');
         $('#ckStatusM').prop('checked', true);
 
     }
@@ -156,7 +190,7 @@
         var editorConfig = {
             filebrowserImageUploadUrl: '/Admin/Upload/UploadImageForCKEditor?type=Images'
         }
-        CKEDITOR.replace('txtContentM', editorConfig);
+        CKEDITOR.replace('txtContent', editorConfig);
         //Fix: cannot click on element ck in modal
         $.fn.modal.Constructor.prototype.enforceFocus = function () {
             $(document)
@@ -172,6 +206,25 @@
                     }
                 }, this));
         };
+    }
+
+    function loadGroups() {
+        $.ajax({
+            type: 'GET',
+            url: '/admin/slide/GetGroups',
+            dataType: 'json',
+            success: function (response) {
+                var render = "<option value=''>--Select group--</option>";
+                $.each(response, function (i, item) {
+                    render += "<option value='" + item.Value + "'>" + item.Text + "</option>"
+                });
+                $('#ddlGroup').html(render);
+            },
+            error: function (status) {
+                console.log(status);
+                tedu.notify('Cannot loading group', 'error');
+            }
+        });
     }
 
     function loadData(isPageChanged) {

@@ -59,6 +59,8 @@ namespace LACoreApp.Data.EF
         public DbSet<Advertisement> Advertisements { get; set; }
         public DbSet<AdvertisementPosition> AdvertisementPositions { get; set; }
 
+        public DbSet<Menu> Menus { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             #region Identity Config

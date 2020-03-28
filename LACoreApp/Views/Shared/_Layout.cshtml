@@ -26,65 +26,24 @@
 </head>
 
 <body class="@ViewData["BodyClass"]">
-
-    <!--[if lt IE 8]>
-    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
-    <!-- mobile menu -->
-    @await Component.InvokeAsync("MobileMenu")
-    <!-- end mobile menu -->
-    <div id="page">
-
-        <!-- Header -->
-        <partial name="_Header.cshtml"/>
-        <!-- end header -->
-        <nav>
-            <div class="container">
-                <div class="row">
-                    <div class="mm-toggle-wrap">
-                        <div class="mm-toggle"><i class="fa fa-align-justify"></i> </div>
-                        <span class="mm-label">All Categories</span>
-                    </div>
-                    <div class="col-md-3 col-sm-3 mega-container hidden-xs">
-                        @await Component.InvokeAsync("CategoryMenu")
-                    </div>
-                    <div class="col-md-9 col-sm-9 jtv-megamenu">
-                        @await Component.InvokeAsync("MainMenu")
-                    </div>
-                </div>
-            </div>
-        </nav>
-
-        @RenderBody()
-        <!-- Footer -->
-        <partial name="_Footer.cshtml" />
-        <!-- End Footer -->
-    </div>
-
-    <!-- JS -->
+    <partial name="_Header.cshtml" />
+    @RenderBody()
+    <partial name="_Footer.cshtml" />
     <!-- jquery js -->
-    <script type="text/javascript" src="~/client-side/js/jquery.min.js"></script>
-
+    <script src="~/client-side/js/jquery.min.js"></script>
+    <script src="~/client-side/js/jquery.smartmenus.js"></script>
     <!-- bootstrap js -->
-    <script type="text/javascript" src="~/client-side/js/bootstrap.min.js"></script>
-
+    <script src="~/client-side/js/bootstrap.min.js"></script>
     <!-- owl.carousel.min js -->
-    <script type="text/javascript" src="~/client-side/js/owl.carousel.min.js"></script>
+    <script src="~/client-side/js/owl.carousel.js"></script>
 
-    <!-- jquery.mobile-menu js -->
-    <script type="text/javascript" src="~/client-side/js/mobile-menu.js"></script>
-
-    <!--jquery-ui.min js -->
-    <script type="text/javascript" src="~/client-side/js/jquery-ui.js"></script>
-
-    <!-- main js -->
-    <script type="text/javascript" src="~/client-side/js/main.js"></script>
-
-    <!-- countdown js -->
-    <script type="text/javascript" src="~/client-side/js/countdown.js"></script>
-
-    <!-- Slider Js -->
-    <script type="text/javascript" src="~/client-side/js/revolution-slider.js"></script>
+    <script src="~/client-side/js/jquery.sticky.js"></script>
+    <script src="~/client-side/js/fotorama.js"></script>
+    <script src="~/client-side/js/wow.min.js"></script>
+    <script src="~/client-side/js/video.js"></script>
+    <script src="~/client-side/js/call-option.js"></script>
+    <script src="~/client-side/js/common.js"></script>
+   
     <script src="~/lib/notifyjs/dist/notify.js"></script>
     <script src="~/lib/notifyjs/dist/styles/metro/notify-metro.js"></script>
     <script src="~/lib/mustache/mustache.js"></script>

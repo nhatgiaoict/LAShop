@@ -108,5 +108,52 @@ namespace LACoreApp.Utilities.Helpers
             if (booAm) str = "Âm " + str;
             return str + "đồng chẵn";
         }
+
+        public static string InnerTruncate(this string value, int maxLength)
+        {
+            // If there is no need to truncate then
+            // return what we were given.
+            if (string.IsNullOrEmpty(value)
+                    || value.Length <= maxLength)
+            {
+                return value;
+            } // end if
+
+            // Figure out how many characters would be in 
+            // each  half if we were to have
+            // exactly the same length string on either side 
+            // of the elipsis.
+            int charsInEachHalf = (maxLength - 3) / 2;
+
+            // Get the string to the right of the elipsis 
+            // and then trim the beginning.  There is no
+            // need to have a space immediately following 
+            // the elipsis.
+            string right = value.Substring(
+                value.Length - charsInEachHalf, charsInEachHalf)
+                .TrimStart();
+
+            // Get the string to the left of the elipsis.
+            // We don't use "charsInEachHalf " here
+            // because we may be able to take more characters
+            // than that if "right" was trimmed.
+            string left = value.Substring(
+                0, (maxLength - 3) - right.Length)
+                .TrimEnd();
+
+            // Concatenate and return the result.
+            return string.Format("{0}...{1}", left, right);
+        } 
+
+        public static string ToStringLimit(this string text, int maxLength, bool showEllipsis = true)
+        {
+            if (maxLength < 0) throw new ArgumentOutOfRangeException("maxLength", "Value must not be negative");
+            if (string.IsNullOrWhiteSpace(text)) return string.Empty;
+            var n = text.Length;
+            var ellipsis = showEllipsis ? "..." : string.Empty;
+            var minLength = ellipsis.Length;
+            maxLength = Math.Max(minLength, maxLength);
+            return n > maxLength ? text.Substring(0, Math.Min(maxLength - minLength, n)) + ellipsis : text;
+        }
     }
 }

@@ -11,6 +11,7 @@ using LACoreApp.Application.Interfaces;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
+using LACoreApp.Data.Enums;
 
 namespace LACoreApp.Controllers
 {
@@ -18,6 +19,7 @@ namespace LACoreApp.Controllers
     {
         private IProductService _productService;
         private IProductCategoryService _productCategoryService;
+        private IBlogCategoryService _blogCategoryService;
 
         private IBlogService _blogService;
         private ICommonService _commonService;
@@ -25,11 +27,13 @@ namespace LACoreApp.Controllers
 
         public HomeController(IProductService productService,
         IBlogService blogService, ICommonService commonService,
+        IBlogCategoryService blogCategoryService,
        IProductCategoryService productCategoryService, IStringLocalizer<HomeController> localizer)
         {
             _blogService = blogService;
             _commonService = commonService;
             _productService = productService;
+            _blogCategoryService = blogCategoryService;
             _productCategoryService = productCategoryService;
             _localizer = localizer;
         }
@@ -41,11 +45,11 @@ namespace LACoreApp.Controllers
             var culture = HttpContext.Features.Get<IRequestCultureFeature>().RequestCulture.Culture.Name;
             ViewData["BodyClass"] = "cms-index-index cms-home-page";
             var homeVm = new HomeViewModel();
-            homeVm.HomeCategories = _productCategoryService.GetHomeCategories(5);
-            homeVm.HotProducts = _productService.GetHotProduct(5);
-            homeVm.TopSellProducts = _productService.GetLastest(5);
+            homeVm.HomeBlogCategories = _blogCategoryService.GetHomeCategories(5);
+            //homeVm.HotProducts = _productService.GetHotProduct(5);
+            //homeVm.TopSellProducts = _productService.GetLastest(6);
             homeVm.LastestBlogs = _blogService.GetLastest(5);
-            homeVm.HomeSlides = _commonService.GetSlides("top");
+            homeVm.HomeSlides = _commonService.GetSlides(SlideGroup.Home.ToString());
             return View(homeVm);
         }
 

@@ -4,8 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using LACoreApp.Application.Interfaces;
 using LACoreApp.Application.ViewModels.Common;
+using LACoreApp.Data.Enums;
+using LACoreApp.Utilities.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LACoreApp.Areas.Admin.Controllers
 {
@@ -33,6 +36,18 @@ namespace LACoreApp.Areas.Admin.Controllers
             var model = _slideService.GetById(id);
 
             return new OkObjectResult(model);
+        }
+
+        public IActionResult GetGroups()
+        {
+            var groups = ((SlideGroup[])Enum.GetValues(typeof(SlideGroup)))
+                .Select(c => new SelectListItem()
+                {
+                    Value = c.ToString(),
+                    Text = c.GetDescription()
+                }).ToList();
+
+            return new OkObjectResult(groups);
         }
 
         [HttpGet]

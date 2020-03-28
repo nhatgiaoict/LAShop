@@ -1,19 +1,26 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Slide";
 }
-@section Scripts{
-
-    <script src="~/app/controllers/slide/index.js" asp-append-version="true"></script>
-    <script>
-        var slideObj = new SlideController();
-        slideObj.initialize();
-    </script>
-}
 @section Styles{
-
+    <link href="~/lib/jQuery-EasyUI/themes/bootstrap/easyui.css" rel="stylesheet" />
+    <link href="~/lib/jQuery-EasyUI/themes/icon.css" rel="stylesheet" />
 }
-<input type="hidden" id="hid-category-id" value="0" />
+@section Scripts{
+    <script src="~/lib/jQuery-EasyUI/jquery.easyui.min.js"></script>
+    <environment names="Development">
+        <script src="~/app/controllers/slide/index.js" asp-append-version="true"></script>
+        <script>
+            var slideObj = new SlideController();
+            slideObj.initialize();
+        </script>
+    </environment>
+    <environment names="Staging,Production">
+        <script>
+            var slideObj = new SlideController();
+            slideObj.initialize();
+        </script>
+    </environment>
+}
 <div class="">
     <div class="page-title">
         <div class="title_left">
@@ -98,4 +105,4 @@
         </tr>
     </script>
 </div>
-@Html.Partial("_AddEditModal.cshtml")
+@await Html.PartialAsync("_AddEditModal.cshtml")

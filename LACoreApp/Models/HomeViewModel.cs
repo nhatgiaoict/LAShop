@@ -12,7 +12,9 @@ namespace LACoreApp.Models
         public List<ProductViewModel> HotProducts { get; set; }
         public List<ProductViewModel> TopSellProducts { get; set; }
 
-        public List<ProductCategoryViewModel> HomeCategories { set; get; }
+        public List<BlogViewModel> HotBlogs { get; set; }
+
+        public List<BlogCategoryViewModel> HomeBlogCategories { set; get; }
 
         public string Title { set; get; }
         public string MetaKeyword { set; get; }

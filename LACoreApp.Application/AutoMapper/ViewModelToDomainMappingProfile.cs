@@ -70,7 +70,10 @@ namespace LACoreApp.Application.AutoMapper
                 c.SeoKeywords, c.SeoDescription));
 
             CreateMap<SlideViewModel, Slide>().ConstructUsing(c =>
-                new Slide(c.Id, c.Name, c.Description, c.Image, c.Url, c.DisplayOrder, c.Status, c.Content));
+                new Slide(c.Id, c.Name, c.GroupAlias, c.Description, c.Image, c.Url, c.DisplayOrder, c.Status, c.Content));
+
+            CreateMap<MenuViewModel, Menu>()
+               .ConstructUsing(c => new Menu(c.Name, c.URL, c.ParentId, c.Group, c.DisplayOrdser, c.Status));
         }
     }
 }

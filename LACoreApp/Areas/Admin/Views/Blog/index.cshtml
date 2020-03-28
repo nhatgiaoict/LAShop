@@ -9,11 +9,13 @@
     <script src="~/lib/jQuery-EasyUI/jquery.easyui.min.js"></script>
     <environment names="Development">
         <script src="~/app/controllers/blog/index.js" asp-append-version="true"></script>
-        <script>var blog = new blogController();
+        <script>
+    var blog = new blogController();
             blog.initialize();</script>
     </environment>
     <environment names="Staging,Production">
-        <script>var blog = new blogController();
+        <script>
+    var blog = new blogController();
             blog.initialize();</script>
     </environment>
 
@@ -98,4 +100,4 @@
         </th>
     </tr>
 </script>
-@Html.Partial("_AddEditModal.cshtml")
+@await Html.PartialAsync("_AddEditModal.cshtml")

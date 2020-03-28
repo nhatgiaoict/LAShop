@@ -12,11 +12,12 @@ namespace LACoreApp.Data.Entities
     {
         public Slide() { }
 
-        public Slide(int id, string name, string description,string image,
+        public Slide(int id, string name, string group, string description,string image,
             string url, int? displayOrder, bool status, string content)
         {
             Id = id;
             Name = name;
+            GroupAlias = group;
             Description = description;
             Image= image;
             Url = url;

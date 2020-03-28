@@ -16,12 +16,15 @@ namespace LACoreApp.Application.Implementation
     public class BlogCategoryService : IBlogCategoryService
     {
         private IRepository<BlogCategory, int> _blogCategoryRepository;
+        private IRepository<Blog, int> _blogRepository;
         private IUnitOfWork _unitOfWork;
 
         public BlogCategoryService(IRepository<BlogCategory, int> blogCategoryRepository,
+            IRepository<Blog, int> blogRepository,
             IUnitOfWork unitOfWork)
         {
             _blogCategoryRepository = blogCategoryRepository;
+            _blogRepository = blogRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -78,11 +81,10 @@ namespace LACoreApp.Application.Implementation
             var categories = query.ToList();
             foreach (var category in categories)
             {
-                //category.Products = _productRepository
-                //    .FindAll(x => x.HotFlag == true && x.CategoryId == category.Id)
-                //    .OrderByDescending(x => x.DateCreated)
-                //    .Take(5)
-                //    .ProjectTo<ProductViewModel>().ToList();
+                category.Blogs = _blogRepository
+                    .FindAll(x=>x.CategoryId==category.Id)
+                    .OrderByDescending(o => o.DateCreated).Take(5)
+                    .ProjectTo<BlogViewModel>().ToList();
             }
             return categories;
         }
