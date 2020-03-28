@@ -73,7 +73,7 @@ namespace LACoreApp.Application.AutoMapper
                 new Slide(c.Id, c.Name, c.GroupAlias, c.Description, c.Image, c.Url, c.DisplayOrder, c.Status, c.Content));
 
             CreateMap<MenuViewModel, Menu>()
-               .ConstructUsing(c => new Menu(c.Name, c.URL, c.ParentId, c.Group, c.DisplayOrdser, c.Status));
+               .ConstructUsing(c => new Menu(c.Name, c.URL, c.ParentId, c.Group, c.SortOrder, c.Status));
         }
     }
 }

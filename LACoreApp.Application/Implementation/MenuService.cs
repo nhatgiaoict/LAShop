@@ -56,14 +56,14 @@ namespace LACoreApp.Application.Implementation
                                        .Where(x => !parentId.HasValue || x.ParentId == parentId)
                                        .Where(x => !group.HasValue || x.Group == group)
                                        .Where(x => status.HasValue || x.Status == status);
-            return query.OrderBy(x => x.DisplayOrdser).ProjectTo<MenuViewModel>().ToListAsync();
+            return query.OrderBy(x => x.SortOrder).ProjectTo<MenuViewModel>().ToListAsync();
 
         }
 
         public IEnumerable<MenuViewModel> GetAllWithParentId(Guid parentId)
         {
             return _menuRepository.FindAll(x => x.ParentId == parentId)
-                                  .OrderBy(x => x.DisplayOrdser)
+                                  .OrderBy(x => x.SortOrder)
                                   .ProjectTo<MenuViewModel>();
         }
 
@@ -79,10 +79,10 @@ namespace LACoreApp.Application.Implementation
         {
             var source = _menuRepository.FindById(sourceId);
             var target = _menuRepository.FindById(targetId);
-            int tempOrder = source.DisplayOrdser;
+            int tempOrder = source.SortOrder;
 
-            source.DisplayOrdser = target.DisplayOrdser;
-            target.DisplayOrdser = tempOrder;
+            source.SortOrder = target.SortOrder;
+            target.SortOrder = tempOrder;
 
             _menuRepository.Update(source);
             _menuRepository.Update(target);
@@ -109,7 +109,7 @@ namespace LACoreApp.Application.Implementation
             var sibling = _menuRepository.FindAll(x => items.ContainsKey(x.Id));
             foreach (var child in sibling)
             {
-                child.DisplayOrdser = items[child.Id];
+                child.SortOrder = items[child.Id];
                 _menuRepository.Update(child);
             }
         }

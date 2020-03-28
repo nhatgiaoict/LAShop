@@ -1,4 +1,5 @@
 ﻿using LACoreApp.Data.Enums;
+using LACoreApp.Data.Interfaces;
 using LACoreApp.Infrastructure.SharedKernel;
 using System;
 using System.Collections.Generic;
@@ -9,15 +10,19 @@ using System.Text;
 namespace LACoreApp.Data.Entities
 {
     [Table("Menus")]
-    public class Menu : DomainEntity<Guid>
+    public class Menu : DomainEntity<Guid>, ISwitchable, ISortable
     {
-        public Menu(string name, string url, Guid? parentId, int group, int displayStatus, Status status)
+        public Menu()
+        {
+
+        }
+        public Menu(string name, string url, Guid? parentId, int group, int sortOrder, Status status)
         {
             this.Name = name;
             this.URL = url;
             this.ParentId = parentId;
             this.Group = group;
-            this.DisplayOrdser = displayStatus;
+            this.SortOrder = sortOrder;
             this.Status = Status.Active;
         }
 
@@ -34,8 +39,7 @@ namespace LACoreApp.Data.Entities
         [Required]
         public int Group { get; set; }
 
-        public int DisplayOrdser { get; set; }
-
         public Status Status { get; set; }
+        public int SortOrder { get ; set ; }
     }
 }

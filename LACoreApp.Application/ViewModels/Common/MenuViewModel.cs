@@ -22,7 +22,7 @@ namespace LACoreApp.Application.ViewModels.Common
         [Required]
         public int Group { get; set; }
 
-        public int DisplayOrdser { get; set; }
+        public int SortOrder { get; set; }
 
         public Status Status { get; set; }
     }

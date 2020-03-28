@@ -1,5 +1,6 @@
 ﻿var menuController = function () {
     this.initialize = function () {
+        loadGroups();
         loadData();
         registerEvents();
     }
@@ -164,6 +165,25 @@
             }
         });
     }
+    function loadGroups() {
+        $.ajax({
+            type: 'GET',
+            url: '/admin/menu/GetGroups',
+            dataType: 'json',
+            success: function (response) {
+                var render = "<option value=''>--Select group--</option>";
+                $.each(response, function (i, item) {
+                    render += "<option value='" + item.Value + "'>" + item.Text + "</option>"
+                });
+                $('#ddlGroup').html(render);
+            },
+            error: function (status) {
+                console.log(status);
+                tedu.notify('Cannot loading group', 'error');
+            }
+        });
+    }
+
     function loadData() {
         $.ajax({
             url: '/Admin/Menu/GetAll',

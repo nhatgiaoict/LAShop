@@ -4,8 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using LACoreApp.Application.Interfaces;
 using LACoreApp.Application.ViewModels.Common;
+using LACoreApp.Data.Enums;
+using LACoreApp.Utilities.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LACoreApp.Areas.Admin.Controllers
 {
@@ -25,12 +28,6 @@ namespace LACoreApp.Areas.Admin.Controllers
         {
             return View();
         }
-        public IActionResult GetAllFillter(string filter)
-        {
-            var model = _menuService.GetList(filter);
-            return new ObjectResult(model);
-        }
-
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -49,7 +46,7 @@ namespace LACoreApp.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll(string filter)
+        public IActionResult GetAllFillter(string filter)
         {
             var model = _menuService.GetList(filter);
             return new ObjectResult(model);
@@ -61,6 +58,17 @@ namespace LACoreApp.Areas.Admin.Controllers
             return new ObjectResult(model);
         }
 
+        public IActionResult GetGroups()
+        {
+            var groups = ((MenuGroup[])Enum.GetValues(typeof(MenuGroup)))
+                .Select(c => new SelectListItem()
+                {
+                    Value = c.ToString(),
+                    Text = c.ToString()
+                }).ToList();
+
+            return new OkObjectResult(groups);
+        }
         [HttpPost]
         public IActionResult SaveEntity(MenuViewModel menuVm)
         {
