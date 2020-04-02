@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using LACoreApp.Application.Interfaces;
@@ -10,6 +11,7 @@ using LACoreApp.Application.ViewModels.Product;
 using LACoreApp.Data.Entities;
 using LACoreApp.Data.Enums;
 using LACoreApp.Infrastructure.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace LACoreApp.Application.Implementation
 {
@@ -64,6 +66,21 @@ namespace LACoreApp.Application.Implementation
             && x.ParentId == parentId)
              .ProjectTo<BlogCategoryViewModel>()
              .ToList();
+        }
+
+        public List<BlogCategoryViewModel> GetAllFlat()
+        {
+            var blogCategories = _blogCategoryRepository.FindAll();
+            var rootBlogCategories = blogCategories.Where(c => c.ParentId == null);
+            var items = new List<BlogCategory>();
+            foreach (var item in rootBlogCategories)
+            {
+                //add the parent category to the item list
+                items.Add(item);
+                //now get all its children (separate Category in case you need recursion)
+                GetByParentId(blogCategories.ToList(), item, items);
+            }
+            return items.AsQueryable().ProjectTo<BlogCategoryViewModel>().ToList();
         }
 
         public BlogCategoryViewModel GetById(int id)
@@ -124,6 +141,20 @@ namespace LACoreApp.Application.Implementation
             {
                 child.SortOrder = items[child.Id];
                 _blogCategoryRepository.Update(child);
+            }
+        }
+
+        public void GetByParentId(IEnumerable<BlogCategory> allItems,
+            BlogCategory parent, IList<BlogCategory> items)
+        {
+            var blogCategoryEntities = allItems as BlogCategory[] ?? allItems.ToArray();
+            var subBlogCategories = blogCategoryEntities.Where(c => c.ParentId == parent.Id);
+            foreach (var bc in subBlogCategories)
+            {
+                //add this category
+                items.Add(bc);
+                //recursive call in case your have a hierarchy more than 1 level deep
+                GetByParentId(blogCategoryEntities, bc, items);
             }
         }
     }

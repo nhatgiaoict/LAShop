@@ -1,17 +1,32 @@
-﻿@model List<ProductCategoryViewModel>
+﻿@using LACoreApp.Application.ViewModels.Common
+@using LACoreApp.Data.Enums
+@model List<MenuViewModel>
 <div class="navbar-collapse collapse">
     <ul id="main-menu" class="sm sm-clean">
         <li><a class="active" href="/"><i class="fa fa-home"></i></a></li>
         @foreach (var item in Model.Where(m => m.ParentId == null))
         {
-            <li><a href="/@item.SeoAlias-c.@(item.Id).html">@item.Name</a></li>
+            var url = "";
+            if (item.Type == (int)MenuType.Blog)
+            { url = "/" + item.Target + "-bc-" + item.CategoryId + ".html"; }
+            else if (item.Type == (int)MenuType.Product)
+            { url = "/" + item.Target + "-pc-" + item.CategoryId + ".html"; }
+            else
+            { url = item.Target; }
+            <li><a href="@url">@item.Name</a></li>
             <ul>
+                @{ 
+                    var hasChild = Model.Any(m => m.ParentId == item.Id);
+                } 
+                @if(hasChild)
+                {
                 <div class="boder-mn">
                     @foreach (var subItem in Model.Where(m => m.ParentId == item.Id))
                     {
-                        <li><a href="/@item.SeoAlias-c.@(item.Id).html">@item.Name</a></li>
+                        <li><a href="@url">@item.Name</a></li>
                     }
                 </div>
+                }
             </ul>
         }
     </ul>

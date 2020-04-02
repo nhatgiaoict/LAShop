@@ -1,7 +1,30 @@
-﻿
+﻿@model List<LACoreApp.Application.ViewModels.Blog.BlogCategoryViewModel>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Các chuyên mục tin tức";
+    ViewData["MetaDescription"] = "Tất cả các chuyên mục của tin tức";
 }
-
-<h2>Index</h2>
+<section id="news-cate">
+    <div class="heading-catagories">
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="bg-news">
+                    @foreach (var item in Model)
+                            {
+                                var url = "/" + item.SeoAlias + "-bc" + "-" + item.Id + ".html";
+                        <div class="thumbnail-news">
+                            <figure><img src="@item.Image" alt="@item.Name" /></figure>
+                            <div class="caption">
+                                <h4><a href="@url">@item.Name</a></h4>
+                                <p class="date"><i class="fa fa-clock-o"></i> @item.DateCreated.ToString("dd-MM-yyyy")</p>
+                                <p class="summary">@item.Description</p>
+                            </div>
+                        </div>
+                    }
+                </div><!--End-->
+            </div><!--End-sidebar-left-->
+        </div>
+    </div>
+</section>
 

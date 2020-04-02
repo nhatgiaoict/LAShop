@@ -1,18 +1,33 @@
 ﻿var menuController = function () {
     this.initialize = function () {
         loadGroups();
+        loadTypes();
         loadData();
         registerEvents();
     }
     function registerEvents() {
-        $('#frmMaintainance').validate({
-            errorClass: 'red',
+        var type = $("#ddlType").val();
+        $("#frmMaintainance").validate({
+            errorClass: "red",
             ignore: [],
-            lang: 'en',
+            lang: "en",
+            focusInvalid: false,
+            invalidHandler: function () {
+                $(this).find(":input.error:first").focus();
+            },
             rules: {
                 txtNameM: { required: true },
                 txtOrderM: { number: true },
-                txtURL: { required: true }
+                txtURL: {
+                    required: function () {
+                        return type == 3;
+                    }
+                },
+                ddlCategory: {
+                    required: function () {
+                        return type == 1 || type == 2;
+                    }
+                }
             }
         });
 
@@ -21,7 +36,24 @@
             initTreeDropDownParent();
             $('#modal-add-edit').modal('show');
         });
-        
+        $('#ddlType').on('change', function () {
+            var type = $('#ddlType').val();
+            if (type == 1 || type == 2) {
+                $('#ddlCategory').parents('.form-group').removeClass('hidden');
+                $('#txtURL').parents('.form-group').addClass('hidden');
+                initTreeDropDownCatagory(type)
+            }
+            else if (type == 3) {
+                $('#ddlCategory').parents('.form-group').addClass('hidden');
+                $('#txtURL').parents('.form-group').removeClass('hidden');
+                $('#txtURL').val('');
+            }
+            else {
+                $('#ddlCategory').parents('.form-group').addClass('hidden');
+                $('#txtURL').parents('.form-group').addClass('hidden');
+            }
+        });
+
         $('body').on('click', '#btnEdit', function (e) {
             e.preventDefault();
             var that = $('#hidIdM').val();
@@ -42,6 +74,8 @@
                     $('#txtURL').val(data.URL);
 
                     $('#ddlGroup').val(data.Group);
+                    initTreeDropDownCatagory(data.Type, data.CategoryId)
+                    $('#ddlType').val(data.Type);
 
                     $('#txtOrderM').val(data.SortOrder);
 
@@ -89,10 +123,14 @@
                 var id = $('#hidIdM').val();
                 var name = $('#txtNameM').val();
                 var parentId = $('#ddlParentIdM').combotree('getValue');
-                var url = $('#txtURL').val();
                 var group = $('#ddlGroup').val();
+                var type = $('#ddlType').val();
                 var order = parseInt($('#txtOrderM').val());
                 var status = $('#ckStatusM').prop('checked') == true ? 1 : 0;
+                var url = $('#txtURL').val();
+                if (type != 3) {
+                    url = $('#ddlCategory').combotree('getValue');
+                }
 
                 $.ajax({
                     type: "POST",
@@ -104,6 +142,7 @@
                         URL: url,
                         SortOrder: order,
                         Group: group,
+                        Type: type,
                         Status: status
                     },
                     dataType: "json",
@@ -128,6 +167,14 @@
             return false;
 
         });
+
+        if ($('#ddlType').val() != 3) {
+            $('#ddlCategory').parents('.form-group').removeClass('hidden');
+            $('#txtURL').parents('.form-group').addClass('hidden');
+        } else {
+            $('#ddlCategory').parents('.form-group').addClass('hidden');
+            $('#txtURL').parents('.form-group').removeClass('hidden');
+        }
     }
     function resetFormMaintainance() {
         $('#hidIdM').val('00000000-0000-0000-0000-000000000000');
@@ -137,6 +184,8 @@
         $('#txtURL').val('');
         $('#txtOrderM').val(1);
         $('#ddlGroup').val('');
+        $('#ddlType').val('');
+        $('#ddlCategory').val('');
         $('#ckStatusM').prop('checked', true);
     }
     function initTreeDropDownParent(selectedId) {
@@ -173,13 +222,63 @@
             success: function (response) {
                 var render = "<option value=''>--Select group--</option>";
                 $.each(response, function (i, item) {
-                    render += "<option value='" + item.Value + "'>" + item.Text + "</option>"
+                    render += "<option value='" + item.Value + "'>" + item.Name + "</option>"
                 });
                 $('#ddlGroup').html(render);
             },
             error: function (status) {
                 console.log(status);
                 tedu.notify('Cannot loading group', 'error');
+            }
+        });
+    }
+
+    function loadTypes() {
+        $.ajax({
+            type: 'GET',
+            url: '/admin/menu/GetTypes',
+            dataType: 'json',
+            success: function (response) {
+                var render = "<option value=''>--Select type--</option>";
+                $.each(response, function (i, item) {
+                    render += "<option value='" + item.Value + "'>" + item.Name + "</option>"
+                });
+                $('#ddlType').html(render);
+            },
+            error: function (status) {
+                console.log(status);
+                tedu.notify('Cannot loading type', 'error');
+            }
+        });
+    }
+
+    function initTreeDropDownCatagory(type, selectedCategory) {
+        var test = parseInt(type);
+        $.ajax({
+            url: "/Admin/Menu/GetCategory",
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                type: test
+            },
+            async: false,
+            success: function (response) {
+                var data = [];
+                $.each(response, function (i, item) {
+                    data.push({
+                        id: item.Id,
+                        text: item.Name,
+                        parentId: item.ParentId,
+                        sortOrder: item.SortOrder
+                    });
+                });
+                var arr = tedu.unflattern(data);
+                $('#ddlCategory').combotree({
+                    data: arr
+                });
+                if (selectedCategory != undefined) {
+                    $('#ddlCategory').combotree('setValue', selectedCategory);
+                }
             }
         });
     }

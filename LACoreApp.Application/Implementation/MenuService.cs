@@ -55,7 +55,7 @@ namespace LACoreApp.Application.Implementation
                                        .Where(x => string.IsNullOrEmpty(filter) || x.Name.Contains(filter))
                                        .Where(x => !parentId.HasValue || x.ParentId == parentId)
                                        .Where(x => !group.HasValue || x.Group == group)
-                                       .Where(x => status.HasValue || x.Status == status);
+                                       .Where(x => !status.HasValue || x.Status == status);
             return query.OrderBy(x => x.SortOrder).ProjectTo<MenuViewModel>().ToListAsync();
 
         }

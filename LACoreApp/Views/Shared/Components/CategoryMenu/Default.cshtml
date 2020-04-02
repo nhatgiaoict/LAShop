@@ -1,4 +1,5 @@
-﻿@model List<ProductCategoryViewModel>
+﻿@using LACoreApp.Application.ViewModels.Common
+@model List<MenuViewModel>
 
 @inject IViewLocalizer Localizer
 <div class="navleft-container">
@@ -14,13 +15,13 @@
                 if (Model.Any(x => x.ParentId == item.Id))
                 {
                     <li>
-                        <a href="/@item.SeoAlias-c.@(item.Id).html">@item.Name</a>
+                        <a href="/@item.Url-c.@(item.Id).html">@item.Name</a>
                         <div class="wrap-popup column1">
                             <div class="popup">
                                 <ul class="nav">
                                     @foreach (var subItem in Model.Where(x => x.ParentId == item.Id))
                                     {
-                                        <li><a href="/@subItem.SeoAlias-c.@(subItem.Id).html"><span>@subItem.Name</span></a></li>
+                                        <li><a href="/@subItem.Url-c.@(subItem.Id).html"><span>@subItem.Name</span></a></li>
                                     }
                                 </ul>
                             </div>
@@ -30,7 +31,7 @@
                 }
                 else
                 {
-                    <li class="nosub"><a href="/@item.SeoAlias-c.@(item.Id).html">@item.Name</a></li>
+                    <li class="nosub"><a href="/@item.Url-c.@(item.Id).html">@item.Name</a></li>
                 }
 
             }

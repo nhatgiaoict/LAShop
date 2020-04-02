@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using LACoreApp.Application.ViewModels.Blog;
 using LACoreApp.Application.ViewModels.Common;
 using LACoreApp.Utilities.Dtos;
@@ -46,5 +47,7 @@ namespace LACoreApp.Application.Interfaces
         List<BlogViewModel> GetListByTag(string tagId, int page, int pagesize, out int totalRow);
 
         List<TagViewModel> GetListTag(string searchText);
+
+        List<BlogViewModel> GetMostView(int top);
     }
 }

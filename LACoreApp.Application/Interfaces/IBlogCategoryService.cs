@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using LACoreApp.Application.ViewModels.Blog;
+using LACoreApp.Data.Entities;
 
 namespace LACoreApp.Application.Interfaces
 {
@@ -25,6 +27,11 @@ namespace LACoreApp.Application.Interfaces
         void ReOrder(int sourceId, int targetId);
 
         List<BlogCategoryViewModel> GetHomeCategories(int top);
+
+        List<BlogCategoryViewModel> GetAllFlat();
+
+        void GetByParentId(IEnumerable<BlogCategory> allItems,
+            BlogCategory parent, IList<BlogCategory> items);
 
         void Save();
     }

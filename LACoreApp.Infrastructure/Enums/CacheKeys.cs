@@ -6,6 +6,7 @@ namespace LACoreApp.Infrastructure.Enums
 {
     public enum CacheKeys
     {
-        ProductCategories
+        ProductCategories,
+        MostView
     }
 }

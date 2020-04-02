@@ -39,23 +39,24 @@
                 <div class="item_category-name"><span style="color: #931882">Bài viết nổi bật</span></div>
                 @foreach (var item in Model.LastestBlogs)
                 {
+                    var url = "/" + item.SeoAlias + "-b" + "-" + item.Id + ".html";
                     <div class="col-md-4">
                         <div class="item_news-block">
                             <figure class="item_img img-intro img-intro__none">
-                                <a href="/@(item.SeoAlias).html">
+                                <a href="@url">
                                     <img src="@item.Image" alt="@item.Name">
                                 </a>
                             </figure>
-                            <h3 class="item_title"><a href="/@(item.SeoAlias).html">@TextHelper.ToStringLimit(item.Name, 75)</a></h3>
+                            <h3 class="item_title"><a href="@url">@TextHelper.ToStringLimit(item.Name, 75)</a></h3>
                             <div class="item_introtext">
                                 <p>@TextHelper.ToStringLimit(item.Description, 134)</p>
                             </div>
                             <div class="clearfix"></div>
                             <div class="item_info">
                                 <ul class="item_info_ul">
-                                    <li class="fa fa-user">@TextHelper.ToStringLimit(item.Name, 75)</li>
+                                    @*<li class="fa fa-user">@TextHelper.ToStringLimit(item.Name, 75)</li>*@
                                     <li class="fa fa-clock-o">@item.DateCreated.ToString("dd-MM-yyyy")</li>
-                                    <li class="readmore"><a href="/@(item.SeoAlias).html"></a></li>
+                                    <li class="readmore"><a href="@url"></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -69,20 +70,22 @@
     <div class="container mobile-no-padding-left-right">
         @foreach (var blogCategory in Model.HomeBlogCategories)
         {
+            var urlCategory = "/" + blogCategory.SeoAlias + "-bc" + "-" + blogCategory.Id + ".html";
             <div class="item-content boder col-md-6 col-sm-6 col-xs-12 mobile-no-padding-left-right">
                 <div class="item_category-name">
-                    <a href="/@(blogCategory.SeoAlias).html" style="color: #931882">
+                    <a href="@urlCategory" style="color: #931882">
                         <span>@TextHelper.ToStringLimit(blogCategory.Name, 75)</span>
                     </a>
                 </div>
                 @foreach (var blog in blogCategory.Blogs)
                 {
+                    var url = "/" + blog.SeoAlias + "-b" + "-" + blog.Id + ".html";
                     <figure class="item_img img-intro img-intro__none">
-                        <a href="/@(blog.SeoAlias).html">
+                        <a href="@url">
                             <img src="@blog.Image" alt="@blog.Name">
                         </a>
                     </figure>
-                    <h3 class="item_title"><a href="/@(blog.SeoAlias).html">@TextHelper.ToStringLimit(blog.Name, 90)</a></h3>
+                    <h3 class="item_title"><a href="@url">@TextHelper.ToStringLimit(blog.Name, 90)</a></h3>
                     <div class="item_introtext">
                         <p>@TextHelper.ToStringLimit(blog.Description, 200)</p>
                     </div>

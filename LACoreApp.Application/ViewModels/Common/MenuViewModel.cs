@@ -1,4 +1,5 @@
 ﻿using LACoreApp.Data.Enums;
+using LACoreApp.Utilities.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,9 +14,8 @@ namespace LACoreApp.Application.ViewModels.Common
         [StringLength(128)]
         public string Name { set; get; }
 
-        [Required]
         [StringLength(250)]
-        public string URL { set; get; }
+        public string Url { set; get; }
 
         public Guid? ParentId { get; set; }
 
@@ -25,5 +25,17 @@ namespace LACoreApp.Application.ViewModels.Common
         public int SortOrder { get; set; }
 
         public Status Status { get; set; }
+
+        public int Type { get; set; }
+
+        public int CategoryId
+        {
+            get
+            {
+                if (Type == (int)MenuType.Customize) return 0;
+                return Url.ToInt();
+            }
+        }
+        public string Target { get; set; }
     }
 }

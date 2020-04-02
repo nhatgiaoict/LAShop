@@ -1,0 +1,34 @@
+﻿@model LACoreApp.Models.BlogViewModels.CatalogViewModel
+@{
+    ViewData["Title"] = Model.Data.CurrentPage == 1 ? Model.Category.Name : Model.Category.Name + " - Page " + Model.Data.CurrentPage;
+    ViewData["MetaKeyword"] = Model.Data.CurrentPage == 1 ? Model.Category.SeoKeywords : Model.Category.SeoKeywords + " - Page " + Model.Data.CurrentPage;
+    ViewData["MetaDescription"] = Model.Data.CurrentPage == 1 ? Model.Category.SeoDescription : Model.Category.SeoDescription + " - Page " + Model.Data.CurrentPage;
+}
+<section id="news-cate">
+    @{ var urlBackground = string.IsNullOrEmpty(Model.Category.Image) ? "images/background.jpg" : Model.Category.Image;}
+    <div class="heading-catagories" style="background-image: url('@urlBackground');">
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="sidebar-left col-md-8 col-sm-8 col-xs-12">
+                <div class="bg-news">
+                    @foreach (var item in Model.Data.Results)
+                    {
+                        var url = "/" + item.SeoAlias + "-b" + "-" + item.Id + ".html";
+                        <div class="thumbnail-news">
+                            <figure><img src="@item.Image" alt="@item.Name" /></figure>
+                            <div class="caption">
+                                <h4><a href="@url">@item.Name</a></h4>
+                                <p class="date"><i class="fa fa-clock-o"></i> @item.DateCreated.ToString("dd-MM-yyyy")</p>
+                                <p class="summary">@item.Description</p>
+                            </div>
+                        </div>
+                    }
+                </div><!--End-->
+            </div><!--End-sidebar-left-->
+            <div class="sidebar-right col-md-4 col-sm-4 col-xs-12" style="margin-top: 30px;">
+                @(await Component.InvokeAsync("MostViews"))
+            </div><!--End-sidebar-right-->
+        </div>
+    </div>
+</section>

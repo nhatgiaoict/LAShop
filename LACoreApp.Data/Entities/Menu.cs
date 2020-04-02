@@ -16,7 +16,7 @@ namespace LACoreApp.Data.Entities
         {
 
         }
-        public Menu(string name, string url, Guid? parentId, int group, int sortOrder, Status status)
+        public Menu(string name, string url, Guid? parentId, int group, int sortOrder, Status status, int type)
         {
             this.Name = name;
             this.URL = url;
@@ -24,6 +24,7 @@ namespace LACoreApp.Data.Entities
             this.Group = group;
             this.SortOrder = sortOrder;
             this.Status = Status.Active;
+            this.Type = type;
         }
 
         [Required]
@@ -38,6 +39,9 @@ namespace LACoreApp.Data.Entities
 
         [Required]
         public int Group { get; set; }
+
+        [Required]
+        public int Type { get; set; }
 
         public Status Status { get; set; }
         public int SortOrder { get ; set ; }

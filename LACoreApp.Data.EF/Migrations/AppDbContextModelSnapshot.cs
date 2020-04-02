@@ -543,8 +543,6 @@ namespace LACoreApp.Data.EF.Migrations
 
                     b.Property<int>("Group");
 
-                    b.Property<int>("HardCode");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128);
@@ -554,6 +552,8 @@ namespace LACoreApp.Data.EF.Migrations
                     b.Property<int>("SortOrder");
 
                     b.Property<int>("Status");
+
+                    b.Property<int>("Type");
 
                     b.Property<string>("URL")
                         .IsRequired()

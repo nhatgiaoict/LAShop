@@ -11,6 +11,7 @@ using LACoreApp.Infrastructure.Interfaces;
 using LACoreApp.Utilities.Constants;
 using LACoreApp.Utilities.Dtos;
 using LACoreApp.Utilities.Helpers;
+using System.Threading.Tasks;
 
 namespace LACoreApp.Application.Implementation
 {
@@ -223,11 +224,12 @@ namespace LACoreApp.Application.Implementation
 
         public void IncreaseView(int id)
         {
-            var product = _blogRepository.FindById(id);
-            if (product.ViewCount.HasValue)
-                product.ViewCount += 1;
+            var blog = _blogRepository.FindById(id);
+            if (blog.ViewCount.HasValue)
+                blog.ViewCount += 1;
             else
-                product.ViewCount = 1;
+                blog.ViewCount = 1;
+            _blogRepository.Update(blog);
         }
 
         public List<BlogViewModel> GetListByTag(string tagId, int page, int pageSize, out int totalRow)
@@ -266,5 +268,11 @@ namespace LACoreApp.Application.Implementation
             return _tagRepository.FindAll(x => x.Type == CommonConstants.ProductTag
             && searchText.Contains(x.Name)).ProjectTo<TagViewModel>().ToList();
         }
+
+        public List<BlogViewModel> GetMostView(int top) => _blogRepository.FindAll()
+            .OrderByDescending(x => x.ViewCount)
+            .Take(top)
+            .ProjectTo<BlogViewModel>()
+            .ToList();
     }
 }

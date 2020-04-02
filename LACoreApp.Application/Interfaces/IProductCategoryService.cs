@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using LACoreApp.Application.ViewModels.Product;
+using LACoreApp.Data.Entities;
 
 namespace LACoreApp.Application.Interfaces
 {
@@ -26,7 +28,10 @@ namespace LACoreApp.Application.Interfaces
 
         List<ProductCategoryViewModel> GetHomeCategories(int top);
 
-       
+        List<ProductCategoryViewModel> GetAllFlat();
+
+        void GetByParentId(IEnumerable<ProductCategory> allItems,
+            ProductCategory parent, IList<ProductCategory> items);
 
 
         void Save();

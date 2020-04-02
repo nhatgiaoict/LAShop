@@ -1,0 +1,20 @@
+﻿@model List<LACoreApp.Application.ViewModels.Blog.BlogViewModel>
+<aside class="c-sidebar">
+    <h2>Bài viết đọc nhiều nhất</h2>
+    <ul class="xemnhieu">
+        @for (var i = 0; i < Model.Count; i++)
+        {
+            var blog = Model[i];
+            var url = "/" + blog.SeoAlias + "-b-" + blog.Id + ".html";
+            if (i == 0)
+            {
+                <figure><img alt="@blog.Name" src="@blog.Image"></figure>
+                <li><a href="@url"><h3>@blog.Name</h3></a></li>
+            }
+            else
+            {
+                <li><a href="@url"><h3>@blog.Name</h3></a></li>
+            }
+        }
+    </ul>
+</aside>

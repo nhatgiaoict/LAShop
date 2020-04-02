@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using LACoreApp.Application.Interfaces;
 using LACoreApp.Application.ViewModels.Common;
 using LACoreApp.Data.Enums;
+using LACoreApp.Models.CommonViewModels;
 using LACoreApp.Utilities.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -16,11 +17,15 @@ namespace LACoreApp.Areas.Admin.Controllers
     {
         #region Initialize
 
-        private IMenuService _menuService;
+        private readonly IMenuService _menuService;
+        private readonly IBlogCategoryService _blogCategoryService;
+        private readonly IProductCategoryService _productCategoryService;
 
-        public MenuController(IMenuService menuService)
+        public MenuController(IMenuService menuService, IBlogCategoryService blogCategoryService, IProductCategoryService productCategoryService)
         {
             _menuService = menuService;
+            _blogCategoryService = blogCategoryService;
+            _productCategoryService = productCategoryService;
         }
 
         #endregion Initialize
@@ -45,8 +50,43 @@ namespace LACoreApp.Areas.Admin.Controllers
             return new ObjectResult(items);
         }
 
+        public IActionResult GetCategory(int type)
+        {
+            var items = new List<CategoryViewModel>();
+            if (type == (int)MenuType.Blog)
+            {
+                var blogCategories = _blogCategoryService.GetAllFlat();
+                foreach(var blCategory in blogCategories)
+                {
+                    var categoryViewModel = new CategoryViewModel() {
+                        Id = blCategory.Id,
+                        Name = blCategory.Name,
+                        SortOrder = blCategory.SortOrder,
+                        ParentId = blCategory.ParentId
+                    };
+                    items.Add(categoryViewModel);
+                }
+            }
+            else if(type == (int)MenuType.Product)
+            {
+                var productCategories = _productCategoryService.GetAllFlat();
+                foreach(var pCate in productCategories)
+                {
+                    var categoryViewModel = new CategoryViewModel()
+                    {
+                        Id = pCate.Id,
+                        Name = pCate.Name,
+                        SortOrder = pCate.SortOrder,
+                        ParentId = pCate.ParentId
+                    };
+                    items.Add(categoryViewModel);
+                }
+            }
+            return new ObjectResult(items);
+        }
+
         [HttpGet]
-        public IActionResult GetAllFillter(string filter)
+        public IActionResult GetAllFilter(string filter)
         {
             var model = _menuService.GetList(filter);
             return new ObjectResult(model);
@@ -61,13 +101,25 @@ namespace LACoreApp.Areas.Admin.Controllers
         public IActionResult GetGroups()
         {
             var groups = ((MenuGroup[])Enum.GetValues(typeof(MenuGroup)))
-                .Select(c => new SelectListItem()
+                .Select(c => new EnumModel()
                 {
-                    Value = c.ToString(),
-                    Text = c.ToString()
+                    Value = (int)c,
+                    Name = c.ToString()
                 }).ToList();
 
             return new OkObjectResult(groups);
+        }
+
+        public IActionResult GetTypes()
+        {
+            var types = ((MenuType[])Enum.GetValues(typeof(MenuType)))
+                .Select(c => new EnumModel()
+                {
+                    Value = (int)c,
+                    Name = c.ToString()
+                }).ToList();
+
+            return new OkObjectResult(types);
         }
         [HttpPost]
         public IActionResult SaveEntity(MenuViewModel menuVm)

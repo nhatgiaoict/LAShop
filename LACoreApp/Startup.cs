@@ -210,6 +210,7 @@ namespace LACoreApp
             {
                 routes.MapHub<TeduHub>("/teduHub");
             });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

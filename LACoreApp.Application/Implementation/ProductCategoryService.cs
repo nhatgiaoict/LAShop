@@ -7,6 +7,8 @@ using LACoreApp.Application.ViewModels.Product;
 using LACoreApp.Data.Entities;
 using LACoreApp.Data.Enums;
 using LACoreApp.Infrastructure.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace LACoreApp.Application.Implementation
 {
@@ -60,9 +62,37 @@ namespace LACoreApp.Application.Implementation
              .ToList();
         }
 
+        public List<ProductCategoryViewModel> GetAllFlat()
+        {
+            var productCategories = _productCategoryRepository.FindAll();
+            var rootProductCategories = productCategories.Where(c => c.ParentId == null);
+            var items = new List<ProductCategory>();
+            foreach (var item in rootProductCategories)
+            {
+                //add the parent category to the item list
+                items.Add(item);
+                //now get all its children (separate Category in case you need recursion)
+                GetByParentId(productCategories.ToList(), item, items);
+            }
+            return items.AsQueryable().ProjectTo<ProductCategoryViewModel>().ToList();
+        }
+
         public ProductCategoryViewModel GetById(int id)
         {
             return Mapper.Map<ProductCategory, ProductCategoryViewModel>(_productCategoryRepository.FindById(id));
+        }
+
+        public void GetByParentId(IEnumerable<ProductCategory> allItems, ProductCategory parent, IList<ProductCategory> items)
+        {
+            var productCategoryEntities = allItems as ProductCategory[] ?? allItems.ToArray();
+            var subProductCategories = productCategoryEntities.Where(c => c.ParentId == parent.Id);
+            foreach (var bc in subProductCategories)
+            {
+                //add this category
+                items.Add(bc);
+                //recursive call in case your have a hierarchy more than 1 level deep
+                GetByParentId(productCategoryEntities, bc, items);
+            }
         }
 
         public List<ProductCategoryViewModel> GetHomeCategories(int top)

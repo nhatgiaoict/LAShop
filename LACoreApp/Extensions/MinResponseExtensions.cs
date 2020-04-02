@@ -1,20 +1,17 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Collections.Generic;
 using System.IO.Compression;
-using System.Linq;
-using System.Threading.Tasks;
 using WebMarkupMin.AspNet.Common.Compressors;
 using WebMarkupMin.AspNetCore2;
 using WebMarkupMin.NUglify;
 
 namespace LACoreApp.Extensions
 {
-    public  static class MinResponseExtensions
+    public static class MinResponseExtensions
     {
         /// <summary>
-        ///     Add service to mini and compress HTML, XML, CSS, JS 
+        ///     Add service to mini and compress HTML, XML, CSS, JS
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>

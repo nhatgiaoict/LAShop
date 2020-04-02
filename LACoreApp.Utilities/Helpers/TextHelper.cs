@@ -155,5 +155,21 @@ namespace LACoreApp.Utilities.Helpers
             maxLength = Math.Max(minLength, maxLength);
             return n > maxLength ? text.Substring(0, Math.Min(maxLength - minLength, n)) + ellipsis : text;
         }
+
+        public static int ToInt(this string s)
+        {
+            var returnInt = 0;
+
+            try
+            {
+                returnInt = int.Parse(s);
+            }
+            catch (Exception)
+            {
+                //throw ex;
+            }
+
+            return returnInt;
+        }
     }
 }
