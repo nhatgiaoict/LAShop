@@ -1,8 +1,11 @@
-﻿@model LACoreApp.Models.BlogViewModels.CatalogViewModel
+﻿@using LACoreApp.Utilities.Common
+@model LACoreApp.Models.BlogViewModels.CatalogViewModel
 @{
-    ViewData["Title"] = Model.Data.CurrentPage == 1 ? Model.Category.Name : Model.Category.Name + " - Page " + Model.Data.CurrentPage;
+    ViewData["Title"] = Model.Data.CurrentPage == 1 ? Model.Category.SeoPageTitle : Model.Category.SeoPageTitle + " - Page " + Model.Data.CurrentPage;
     ViewData["MetaKeyword"] = Model.Data.CurrentPage == 1 ? Model.Category.SeoKeywords : Model.Category.SeoKeywords + " - Page " + Model.Data.CurrentPage;
     ViewData["MetaDescription"] = Model.Data.CurrentPage == 1 ? Model.Category.SeoDescription : Model.Category.SeoDescription + " - Page " + Model.Data.CurrentPage;
+
+    ViewData["MetaImage"] = ConfigurationManager.GetUrlRoot() + Model.Category.Image;
 }
 <section id="news-cate">
     @{ var urlBackground = string.IsNullOrEmpty(Model.Category.Image) ? "images/background.jpg" : Model.Category.Image;}

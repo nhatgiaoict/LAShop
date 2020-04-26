@@ -14,9 +14,11 @@
             blog.initialize();</script>
     </environment>
     <environment names="Staging,Production">
+        <script src="~/app/controllers/blog/index.js" asp-append-version="true"></script>
         <script>
-    var blog = new blogController();
-            blog.initialize();</script>
+            var blog = new blogController();
+            blog.initialize();
+        </script>
     </environment>
 
 }

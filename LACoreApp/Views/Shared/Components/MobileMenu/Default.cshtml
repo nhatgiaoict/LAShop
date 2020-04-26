@@ -1,30 +1,36 @@
-﻿@model List<ProductCategoryViewModel>
-<div id="mobile-menu">
-    <ul>
-        <li>
-            <a href="/" class="home1">Home</a>
-        </li>
-        <li>
-            <a href="/products.html">Products</a>
-            <ul>
-                @foreach (var item in Model.Where(x => x.ParentId == null))
-                {
-                    <li>
-                        <a href="/@item.SeoAlias-c.@(item.Id).html">@item.Name </a>
-                        @if (Model.Any(x => x.ParentId == item.Id))
-                        {
-                            <ul>
-                                @foreach (var subItem in Model.Where(x => x.ParentId == item.Id))
+﻿@using LACoreApp.Data.Enums
+@model List<LACoreApp.Application.ViewModels.Common.MenuViewModel>
+<nav class="ampstart-sidebar-nav ampstart-nav">
+    <ul class="list-reset m0 p0 ampstart-label">
+        @foreach (var item in Model.Where(m => m.ParentId == null))
+        {
+            var url = "";
+            if (item.Type == (int)MenuType.Blog) { url = "/" + item.Target + "-bc-" + item.CategoryId + ".html"; }
+            else if (item.Type == (int)MenuType.Product) { url = "/" + item.Target + "-pc-" + item.CategoryId + ".html"; }
+            else { url = item.Target; }
+            var hasChild = Model.Any(m => m.ParentId == item.Id);
+            if (hasChild)
+            {
+                <li class="ampstart-nav-item ampstart-nav-dropdown relative ">
+                    <!-- Start Dropdown-inline -->
+                    <amp-accordion layout="container" disable-session-states="" class="ampstart-dropdown i-amphtml-element i-amphtml-layout-container i-amphtml-layout" i-amphtml-layout="container">
+                        <section>
+                            <header class="i-amphtml-accordion-header" role="button" aria-controls="77_AMP_content_0" aria-expanded="false" tabindex="0">@item.Name</header>
+                            <ul class="ampstart-dropdown-items list-reset m0 p0 i-amphtml-accordion-content" id="77_AMP_content_0">
+                                @foreach (var subItem in Model.Where(m => m.ParentId == item.Id))
                                 {
-                                    <li><a href="/@subItem.SeoAlias-c.@(subItem.Id).html"><span>@subItem.Name</span></a></li>
+                                    <li class="ampstart-dropdown-item"><a href="@url" class="text-decoration-none">@item.Name</a></li>
                                 }
                             </ul>
-                        }
-
-                    </li>
-                }
-            </ul>
-        </li>
-       
+                        </section>
+                    </amp-accordion>
+                    <!-- End Dropdown-inline -->
+                </li>
+            }
+            else
+            {
+                <li class="ampstart-nav-item "><a class="ampstart-nav-link" href="@url">@item.Name</a></li>
+            }
+        }
     </ul>
-</div>
+</nav>

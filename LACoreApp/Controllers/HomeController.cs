@@ -8,10 +8,16 @@ using LACoreApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using LACoreApp.Extensions;
 using LACoreApp.Application.Interfaces;
+using LACoreApp.Application.ViewModels.Blog;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using LACoreApp.Data.Enums;
+using LACoreApp.Data.SeoStructureData;
+using LACoreApp.Data.SeoStructureData.Common;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+
 
 namespace LACoreApp.Controllers
 {
@@ -20,6 +26,7 @@ namespace LACoreApp.Controllers
         private IProductService _productService;
         private IProductCategoryService _productCategoryService;
         private IBlogCategoryService _blogCategoryService;
+        private IConfiguration _configuration;
 
         private IBlogService _blogService;
         private ICommonService _commonService;
@@ -28,7 +35,9 @@ namespace LACoreApp.Controllers
         public HomeController(IProductService productService,
         IBlogService blogService, ICommonService commonService,
         IBlogCategoryService blogCategoryService,
-       IProductCategoryService productCategoryService, IStringLocalizer<HomeController> localizer)
+       IProductCategoryService productCategoryService, 
+        IStringLocalizer<HomeController> localizer,
+        IConfiguration configuration)
         {
             _blogService = blogService;
             _commonService = commonService;
@@ -36,9 +45,10 @@ namespace LACoreApp.Controllers
             _blogCategoryService = blogCategoryService;
             _productCategoryService = productCategoryService;
             _localizer = localizer;
+            _configuration = configuration;
         }
 
-        //[ResponseCache(CacheProfileName = "Default")]
+        [ResponseCache(CacheProfileName = "Default")]
         public IActionResult Index()
         {
             var title = _localizer["Title"];
@@ -48,8 +58,12 @@ namespace LACoreApp.Controllers
             homeVm.HomeBlogCategories = _blogCategoryService.GetHomeCategories(5);
             //homeVm.HotProducts = _productService.GetHotProduct(5);
             //homeVm.TopSellProducts = _productService.GetLastest(6);
-            homeVm.LastestBlogs = _blogService.GetLastest(5);
+            homeVm.LastestBlogs = _blogService.GetLastest(6);
             homeVm.HomeSlides = _commonService.GetSlides(SlideGroup.Home.ToString());
+
+            var webStructure = BuildWebsiteStructured();
+
+            ViewData["WebsiteJson"] = JsonConvert.SerializeObject(BuildWebsiteStructured(), new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             return View(homeVm);
         }
 
@@ -83,5 +97,19 @@ namespace LACoreApp.Controllers
 
             return LocalRedirect(returnUrl);
         }
+
+        private WebsiteStructureData BuildWebsiteStructured()
+        {
+            var webStructuredSchema = new WebsiteStructureData()
+            {
+                Context = "http://schema.org",
+                Type = "WebSite",
+                Name = _configuration["SystemSettings:WebsiteStruct:Name"],
+                AlternateName= _configuration["SystemSettings:WebsiteStruct:AlternateName"],
+                Url = _configuration["SystemSettings:Domain"]
+            };
+            return webStructuredSchema;
+        }
     }
+
 }

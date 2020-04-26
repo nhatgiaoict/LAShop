@@ -203,7 +203,7 @@
                 $('#txtNameM').val(data.Name);
                 initTreeDropDownCategory(data.CategoryId);
                 $('#txtDescM').val(data.Description);
-                $('#txtImageM').val(data.Image);
+                $('#txtImage').val(data.Image);
                 $('#txtTagM').val(data.Tags);
                 $('#txtMetakeywordM').val(data.SeoKeywords);
                 $('#txtMetaDescriptionM').val(data.SeoDescription);
@@ -258,7 +258,6 @@
         $('#txtDescM').val('');
         $('#txtTagM').val('');
         $('#txtImage').val('');
-        $('#txtContent').val('');
         $('#txtMetakeywordM').val('');
         $('#txtMetaDescriptionM').val('');
         $('#txtSeoPageTitleM').val('');
@@ -268,7 +267,7 @@
         $('#ckStatusM').prop('checked', true);
         $('#ckHotM').prop('checked', false);
         $('#ckShowHomeM').prop('checked', false);
-
+        CKEDITOR.instances.txtContent.setData('');
     }
     function loadCategories() {
         $.ajax({

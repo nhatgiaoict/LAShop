@@ -68,7 +68,12 @@ namespace LACoreApp.Areas.Admin.Controllers
             }
             else
             {
-                blogVm.SeoAlias = TextHelper.ToUnsignString(blogVm.Name);
+                if (string.IsNullOrEmpty(blogVm.SeoAlias))
+                    blogVm.SeoAlias = TextHelper.ToUnsignString(blogVm.Name).ToLower();
+                else
+                {
+                    blogVm.SeoAlias = TextHelper.ToUnsignString(blogVm.SeoAlias).ToLower();
+                }
                 if (blogVm.Id == 0)
                 {
                     _blogService.Add(blogVm);

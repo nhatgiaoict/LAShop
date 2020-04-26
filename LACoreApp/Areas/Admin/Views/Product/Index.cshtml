@@ -6,24 +6,24 @@
     <link href="~/lib/jQuery-EasyUI/themes/icon.css" rel="stylesheet" />
 }
 @section Scripts{
-<script src="~/lib/jQuery-EasyUI/jquery.easyui.min.js"></script>
+    <script src="~/lib/jQuery-EasyUI/jquery.easyui.min.js"></script>
 
-<environment names="Development">
-    <script src="~/app/controllers/product/image-management.js" asp-append-version="true"></script>
-    <script src="~/app/controllers/product/quantity-management.js" asp-append-version="true"></script>
-    <script src="~/app/controllers/product/whole-price-management.js" asp-append-version="true"></script>
-    <script src="~/app/controllers/product/index.js" asp-append-version="true"></script>
-    <script>
-        var product = new productController();
-        product.initialize();
-    </script>
-</environment>
-<environment names="Staging,Production">
-    <script>
-        var product = new productController();
-        product.initialize();
-    </script>
-</environment>
+    <environment names="Development">
+        <script src="~/app/controllers/product/image-management.js" asp-append-version="true"></script>
+        <script src="~/app/controllers/product/quantity-management.js" asp-append-version="true"></script>
+        <script src="~/app/controllers/product/whole-price-management.js" asp-append-version="true"></script>
+        <script src="~/app/controllers/product/index.js" asp-append-version="true"></script>
+        <script>
+            var product = new productController();
+            product.initialize();
+        </script>
+    </environment>
+    <environment names="Staging,Production">
+        <script>
+            var product = new productController();
+            product.initialize();
+        </script>
+    </environment>
 
 
 }
@@ -65,7 +65,7 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                           
+
                             <th>Name</th>
                             <th>Category</th>
                             <th>Price</th>
@@ -104,7 +104,7 @@
 </div>
 <script id="table-template" type="x-tmpl-mustache">
     <tr>
-        
+
         <td>{{Name}}</td>
         <td>{{CategoryName}}</td>
         <td>{{Price}}</td>
@@ -120,8 +120,8 @@
         </th>
     </tr>
 </script>
-@Html.Partial("_AddEditModal.cshtml")
-@Html.Partial("_ImportExcelModal.cshtml")
-@Html.Partial("_QuantityManagement.cshtml")
-@Html.Partial("_ImageManagement.cshtml")
-@Html.Partial("_WholePriceManagement.cshtml")
+@await Html.PartialAsync("_AddEditModal.cshtml")
+@await Html.PartialAsync("_ImportExcelModal.cshtml")
+@await Html.PartialAsync("_QuantityManagement.cshtml")
+@await Html.PartialAsync("_ImageManagement.cshtml")
+@await Html.PartialAsync("_WholePriceManagement.cshtml")

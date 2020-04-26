@@ -15,6 +15,7 @@
         </script>
     </environment>
     <environment names="Staging,Production">
+        <script src="~/app/controllers/slide/index.js" asp-append-version="true"></script>
         <script>
             var slideObj = new SlideController();
             slideObj.initialize();

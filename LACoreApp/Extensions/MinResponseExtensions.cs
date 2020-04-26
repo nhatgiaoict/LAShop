@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO.Compression;
 using WebMarkupMin.AspNet.Common.Compressors;
 using WebMarkupMin.AspNetCore2;
+using WebMarkupMin.Core;
 using WebMarkupMin.NUglify;
 
 namespace LACoreApp.Extensions
@@ -35,9 +36,10 @@ namespace LACoreApp.Extensions
                 {
                     options.MinificationSettings.MinifyEmbeddedCssCode = true;
                     options.MinificationSettings.RemoveRedundantAttributes = true;
-                    options.MinificationSettings.RemoveHttpProtocolFromAttributes = true;
-                    options.MinificationSettings.RemoveHttpsProtocolFromAttributes = true;
+                    options.MinificationSettings.RemoveHttpProtocolFromAttributes = false;
+                    options.MinificationSettings.RemoveHttpsProtocolFromAttributes = false;
                     options.MinificationSettings.RemoveOptionalEndTags = false; // [Important] Don't enable/true this
+                    options.MinificationSettings.AttributeQuotesRemovalMode = HtmlAttributeQuotesRemovalMode.KeepQuotes;
 
                     options.CssMinifierFactory = new NUglifyCssMinifierFactory();
                     options.JsMinifierFactory = new NUglifyJsMinifierFactory();

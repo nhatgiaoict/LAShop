@@ -1,0 +1,504 @@
+2020-04-11T21:30:15.3363080+07:00 0HLUU4JCUPCG1:00000001 [INF] Request starting HTTP/1.1 GET http://localhost:3000/   (ca22a1cb)
+2020-04-11T21:30:15.6450660+07:00 0HLUU4JCUPCG1:00000001 [INF] Route matched with "{action = \"Index\", controller = \"Home\", area = \"\"}". Executing controller action with signature "Microsoft.AspNetCore.Mvc.IActionResult Index()" on controller "LACoreApp.Controllers.HomeController" ("LACoreApp"). (122b2fdf)
+2020-04-11T21:30:15.6709537+07:00 0HLUU4JCUPCG1:00000001 [INF] Executing action method "LACoreApp.Controllers.HomeController.Index (LACoreApp)" - Validation state: Valid (dad538d7)
+2020-04-11T21:30:15.6832774+07:00 0HLUU4JCUPCG1:00000001 [INF] Entity Framework Core "2.1.14-servicing-32113" initialized '"AppDbContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "MigrationsAssembly=LACoreApp.Data.EF " (9958f5bb)
+2020-04-11T21:30:15.7565454+07:00 0HLUU4JCUPCG1:00000001 [WRN] The Include operation for navigation '"[c].Blogs"' is unnecessary and was ignored because the navigation is not reachable in the final query results. See https://go.microsoft.com/fwlink/?linkid=850303 for more information. (10efaee6)
+2020-04-11T21:30:15.8626886+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("20"ms) [Parameters=["@__p_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(@__p_0) [c].[Id], [c].[Name], [c].[Description], [c].[ParentId], [c].[HomeOrder], [c].[Image], [c].[HomeFlag], [c].[DateCreated], [c].[DateModified], [c].[SortOrder], [c].[Status], [c].[SeoPageTitle], [c].[SeoAlias], [c].[SeoKeywords], [c].[SeoDescription]
+FROM [BlogCategories] AS [c]
+WHERE [c].[HomeFlag] = 1
+ORDER BY [c].[HomeOrder], [c].[Id]" (0723d8ff)
+2020-04-11T21:30:16.0358045+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("158"ms) [Parameters=["@__p_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[HomeOrder], [t].[Id], [c.Blogs].[Id] AS [Id0], [c.Blogs].[Name], [c.Blogs].[CategoryId], [c.Blogs].[Image], [c.Blogs].[Description], [c.Blogs].[Content], [c.Blogs].[HomeFlag], [c.Blogs].[HotFlag], [c.Blogs].[ViewCount], [c.Blogs].[Tags], [c.Blogs].[DateCreated], [c.Blogs].[DateModified], [c.Blogs].[Status], [c.Blogs].[SeoPageTitle], [c.Blogs].[SeoAlias], [c.Blogs].[SeoKeywords], [c.Blogs].[SeoDescription]
+FROM [Blogs] AS [c.Blogs]
+INNER JOIN (
+    SELECT TOP(@__p_0) [c0].[HomeOrder], [c0].[Id]
+    FROM [BlogCategories] AS [c0]
+    WHERE [c0].[HomeFlag] = 1
+    ORDER BY [c0].[HomeOrder], [c0].[Id]
+) AS [t] ON [c.Blogs].[CategoryId] = [t].[Id]
+ORDER BY [t].[HomeOrder], [t].[Id], [c.Blogs].[Id]" (0723d8ff)
+2020-04-11T21:30:16.4706185+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("241"ms) [Parameters=["@__p_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t1].[HomeOrder], [t1].[Id], [t1].[Id0], [c.Blogs.BlogTags].[BlogId], [c.Blogs.BlogTags].[TagId]
+FROM [BlogTags] AS [c.Blogs.BlogTags]
+INNER JOIN (
+    SELECT [t0].[HomeOrder], [t0].[Id], [c.Blogs0].[Id] AS [Id0]
+    FROM [Blogs] AS [c.Blogs0]
+    INNER JOIN (
+        SELECT TOP(@__p_0) [c1].[HomeOrder], [c1].[Id]
+        FROM [BlogCategories] AS [c1]
+        WHERE [c1].[HomeFlag] = 1
+        ORDER BY [c1].[HomeOrder], [c1].[Id]
+    ) AS [t0] ON [c.Blogs0].[CategoryId] = [t0].[Id]
+) AS [t1] ON [c.Blogs.BlogTags].[BlogId] = [t1].[Id0]
+ORDER BY [t1].[HomeOrder], [t1].[Id], [t1].[Id0]" (0723d8ff)
+2020-04-11T21:30:16.6514602+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("37"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__category_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(@__p_1) [x].[Id], [x].[Name], [x].[CategoryId], [x].[Image], [x].[Description], [x].[Content], [x].[HomeFlag], [x].[HotFlag], [x].[ViewCount], [x].[Tags], CASE
+    WHEN [x].[CategoryId] IS NOT NULL
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END, [x].[CategoryId] AS [Id0], [x.BlogCategory].[Name] AS [Name0], [x.BlogCategory].[Description] AS [Description0], [x.BlogCategory].[ParentId], [x.BlogCategory].[HomeOrder], [x.BlogCategory].[Image] AS [Image0], [x.BlogCategory].[HomeFlag] AS [HomeFlag0], [x.BlogCategory].[DateCreated], [x.BlogCategory].[DateModified], [x.BlogCategory].[SortOrder], [x.BlogCategory].[Status], [x.BlogCategory].[SeoPageTitle], [x.BlogCategory].[SeoAlias], [x.BlogCategory].[SeoKeywords], [x.BlogCategory].[SeoDescription], [x].[DateCreated] AS [DateCreated0], [x].[DateModified] AS [DateModified0], [x].[Status] AS [Status0], [x].[SeoPageTitle] AS [SeoPageTitle0], [x].[SeoAlias] AS [SeoAlias0], [x].[SeoKeywords] AS [SeoKeywords0], [x].[SeoDescription] AS [SeoDescription0], [x.BlogCategory].[Id]
+FROM [Blogs] AS [x]
+LEFT JOIN [BlogCategories] AS [x.BlogCategory] ON [x].[CategoryId] = [x.BlogCategory].[Id]
+WHERE [x].[CategoryId] = @__category_Id_0
+ORDER BY [DateCreated0] DESC, [x].[Id], [x.BlogCategory].[Id]" (0723d8ff)
+2020-04-11T21:30:16.6778931+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("8"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__category_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[DateCreated], [t].[Id], [x.BlogTags].[BlogId], [x.BlogTags].[TagId]
+FROM [BlogTags] AS [x.BlogTags]
+INNER JOIN (
+    SELECT TOP(@__p_1) [x0].[DateCreated], [x0].[Id]
+    FROM [Blogs] AS [x0]
+    LEFT JOIN [BlogCategories] AS [x.BlogCategory0] ON [x0].[CategoryId] = [x.BlogCategory0].[Id]
+    WHERE [x0].[CategoryId] = @__category_Id_0
+    ORDER BY [x0].[DateCreated] DESC, [x0].[Id]
+) AS [t] ON [x.BlogTags].[BlogId] = [t].[Id]
+ORDER BY [t].[DateCreated] DESC, [t].[Id]" (0723d8ff)
+2020-04-11T21:30:16.7088150+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("20"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__category_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t0].[DateCreated], [t0].[Id], [t0].[Id0], [x.BlogCategory.Blogs].[Id] AS [Id1], [x.BlogCategory.Blogs].[Name], [x.BlogCategory.Blogs].[CategoryId], [x.BlogCategory.Blogs].[Image], [x.BlogCategory.Blogs].[Description], [x.BlogCategory.Blogs].[Content], [x.BlogCategory.Blogs].[HomeFlag], [x.BlogCategory.Blogs].[HotFlag], [x.BlogCategory.Blogs].[ViewCount], [x.BlogCategory.Blogs].[Tags], [x.BlogCategory.Blogs].[DateCreated] AS [DateCreated0], [x.BlogCategory.Blogs].[DateModified], [x.BlogCategory.Blogs].[Status], [x.BlogCategory.Blogs].[SeoPageTitle], [x.BlogCategory.Blogs].[SeoAlias], [x.BlogCategory.Blogs].[SeoKeywords], [x.BlogCategory.Blogs].[SeoDescription]
+FROM [Blogs] AS [x.BlogCategory.Blogs]
+INNER JOIN (
+    SELECT TOP(@__p_1) [x1].[DateCreated], [x1].[Id], [x.BlogCategory1].[Id] AS [Id0]
+    FROM [Blogs] AS [x1]
+    LEFT JOIN [BlogCategories] AS [x.BlogCategory1] ON [x1].[CategoryId] = [x.BlogCategory1].[Id]
+    WHERE [x1].[CategoryId] = @__category_Id_0
+    ORDER BY [x1].[DateCreated] DESC, [x1].[Id], [x.BlogCategory1].[Id]
+) AS [t0] ON [x.BlogCategory.Blogs].[CategoryId] = [t0].[Id0]
+ORDER BY [t0].[DateCreated] DESC, [t0].[Id], [t0].[Id0], [x.BlogCategory.Blogs].[Id]" (0723d8ff)
+2020-04-11T21:30:16.7609716+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("17"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__category_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t2].[DateCreated], [t2].[Id], [t2].[Id0], [t2].[Id1], [x.BlogCategory.Blogs.BlogTags].[BlogId], [x.BlogCategory.Blogs.BlogTags].[TagId]
+FROM [BlogTags] AS [x.BlogCategory.Blogs.BlogTags]
+INNER JOIN (
+    SELECT [t1].[DateCreated], [t1].[Id], [t1].[Id0], [x.BlogCategory.Blogs0].[Id] AS [Id1]
+    FROM [Blogs] AS [x.BlogCategory.Blogs0]
+    INNER JOIN (
+        SELECT TOP(@__p_1) [x2].[DateCreated], [x2].[Id], [x.BlogCategory2].[Id] AS [Id0]
+        FROM [Blogs] AS [x2]
+        LEFT JOIN [BlogCategories] AS [x.BlogCategory2] ON [x2].[CategoryId] = [x.BlogCategory2].[Id]
+        WHERE [x2].[CategoryId] = @__category_Id_0
+        ORDER BY [x2].[DateCreated] DESC, [x2].[Id], [x.BlogCategory2].[Id]
+    ) AS [t1] ON [x.BlogCategory.Blogs0].[CategoryId] = [t1].[Id0]
+) AS [t2] ON [x.BlogCategory.Blogs.BlogTags].[BlogId] = [t2].[Id1]
+ORDER BY [t2].[DateCreated] DESC, [t2].[Id], [t2].[Id0], [t2].[Id1]" (0723d8ff)
+2020-04-11T21:30:16.7735540+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("2"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__category_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(@__p_1) [x].[Id], [x].[Name], [x].[CategoryId], [x].[Image], [x].[Description], [x].[Content], [x].[HomeFlag], [x].[HotFlag], [x].[ViewCount], [x].[Tags], CASE
+    WHEN [x].[CategoryId] IS NOT NULL
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END, [x].[CategoryId] AS [Id0], [x.BlogCategory].[Name] AS [Name0], [x.BlogCategory].[Description] AS [Description0], [x.BlogCategory].[ParentId], [x.BlogCategory].[HomeOrder], [x.BlogCategory].[Image] AS [Image0], [x.BlogCategory].[HomeFlag] AS [HomeFlag0], [x.BlogCategory].[DateCreated], [x.BlogCategory].[DateModified], [x.BlogCategory].[SortOrder], [x.BlogCategory].[Status], [x.BlogCategory].[SeoPageTitle], [x.BlogCategory].[SeoAlias], [x.BlogCategory].[SeoKeywords], [x.BlogCategory].[SeoDescription], [x].[DateCreated] AS [DateCreated0], [x].[DateModified] AS [DateModified0], [x].[Status] AS [Status0], [x].[SeoPageTitle] AS [SeoPageTitle0], [x].[SeoAlias] AS [SeoAlias0], [x].[SeoKeywords] AS [SeoKeywords0], [x].[SeoDescription] AS [SeoDescription0], [x.BlogCategory].[Id]
+FROM [Blogs] AS [x]
+LEFT JOIN [BlogCategories] AS [x.BlogCategory] ON [x].[CategoryId] = [x.BlogCategory].[Id]
+WHERE [x].[CategoryId] = @__category_Id_0
+ORDER BY [DateCreated0] DESC, [x].[Id], [x.BlogCategory].[Id]" (0723d8ff)
+2020-04-11T21:30:16.7903849+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("16"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__category_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[DateCreated], [t].[Id], [x.BlogTags].[BlogId], [x.BlogTags].[TagId]
+FROM [BlogTags] AS [x.BlogTags]
+INNER JOIN (
+    SELECT TOP(@__p_1) [x0].[DateCreated], [x0].[Id]
+    FROM [Blogs] AS [x0]
+    LEFT JOIN [BlogCategories] AS [x.BlogCategory0] ON [x0].[CategoryId] = [x.BlogCategory0].[Id]
+    WHERE [x0].[CategoryId] = @__category_Id_0
+    ORDER BY [x0].[DateCreated] DESC, [x0].[Id]
+) AS [t] ON [x.BlogTags].[BlogId] = [t].[Id]
+ORDER BY [t].[DateCreated] DESC, [t].[Id]" (0723d8ff)
+2020-04-11T21:30:16.8107288+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("20"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__category_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t0].[DateCreated], [t0].[Id], [t0].[Id0], [x.BlogCategory.Blogs].[Id] AS [Id1], [x.BlogCategory.Blogs].[Name], [x.BlogCategory.Blogs].[CategoryId], [x.BlogCategory.Blogs].[Image], [x.BlogCategory.Blogs].[Description], [x.BlogCategory.Blogs].[Content], [x.BlogCategory.Blogs].[HomeFlag], [x.BlogCategory.Blogs].[HotFlag], [x.BlogCategory.Blogs].[ViewCount], [x.BlogCategory.Blogs].[Tags], [x.BlogCategory.Blogs].[DateCreated] AS [DateCreated0], [x.BlogCategory.Blogs].[DateModified], [x.BlogCategory.Blogs].[Status], [x.BlogCategory.Blogs].[SeoPageTitle], [x.BlogCategory.Blogs].[SeoAlias], [x.BlogCategory.Blogs].[SeoKeywords], [x.BlogCategory.Blogs].[SeoDescription]
+FROM [Blogs] AS [x.BlogCategory.Blogs]
+INNER JOIN (
+    SELECT TOP(@__p_1) [x1].[DateCreated], [x1].[Id], [x.BlogCategory1].[Id] AS [Id0]
+    FROM [Blogs] AS [x1]
+    LEFT JOIN [BlogCategories] AS [x.BlogCategory1] ON [x1].[CategoryId] = [x.BlogCategory1].[Id]
+    WHERE [x1].[CategoryId] = @__category_Id_0
+    ORDER BY [x1].[DateCreated] DESC, [x1].[Id], [x.BlogCategory1].[Id]
+) AS [t0] ON [x.BlogCategory.Blogs].[CategoryId] = [t0].[Id0]
+ORDER BY [t0].[DateCreated] DESC, [t0].[Id], [t0].[Id0], [x.BlogCategory.Blogs].[Id]" (0723d8ff)
+2020-04-11T21:30:16.8192761+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("8"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__category_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t2].[DateCreated], [t2].[Id], [t2].[Id0], [t2].[Id1], [x.BlogCategory.Blogs.BlogTags].[BlogId], [x.BlogCategory.Blogs.BlogTags].[TagId]
+FROM [BlogTags] AS [x.BlogCategory.Blogs.BlogTags]
+INNER JOIN (
+    SELECT [t1].[DateCreated], [t1].[Id], [t1].[Id0], [x.BlogCategory.Blogs0].[Id] AS [Id1]
+    FROM [Blogs] AS [x.BlogCategory.Blogs0]
+    INNER JOIN (
+        SELECT TOP(@__p_1) [x2].[DateCreated], [x2].[Id], [x.BlogCategory2].[Id] AS [Id0]
+        FROM [Blogs] AS [x2]
+        LEFT JOIN [BlogCategories] AS [x.BlogCategory2] ON [x2].[CategoryId] = [x.BlogCategory2].[Id]
+        WHERE [x2].[CategoryId] = @__category_Id_0
+        ORDER BY [x2].[DateCreated] DESC, [x2].[Id], [x.BlogCategory2].[Id]
+    ) AS [t1] ON [x.BlogCategory.Blogs0].[CategoryId] = [t1].[Id0]
+) AS [t2] ON [x.BlogCategory.Blogs.BlogTags].[BlogId] = [t2].[Id1]
+ORDER BY [t2].[DateCreated] DESC, [t2].[Id], [t2].[Id0], [t2].[Id1]" (0723d8ff)
+2020-04-11T21:30:16.8977527+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("10"ms) [Parameters=["@__p_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(@__p_0) [x].[Id], [x].[Name], [x].[CategoryId], [x].[Image], [x].[Description], [x].[Content], [x].[HomeFlag], [x].[HotFlag], [x].[ViewCount], [x].[Tags], CASE
+    WHEN [x].[CategoryId] IS NOT NULL
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END, [x].[CategoryId] AS [Id0], [x.BlogCategory].[Name] AS [Name0], [x.BlogCategory].[Description] AS [Description0], [x.BlogCategory].[ParentId], [x.BlogCategory].[HomeOrder], [x.BlogCategory].[Image] AS [Image0], [x.BlogCategory].[HomeFlag] AS [HomeFlag0], [x.BlogCategory].[DateCreated], [x.BlogCategory].[DateModified], [x.BlogCategory].[SortOrder], [x.BlogCategory].[Status], [x.BlogCategory].[SeoPageTitle], [x.BlogCategory].[SeoAlias], [x.BlogCategory].[SeoKeywords], [x.BlogCategory].[SeoDescription], [x].[DateCreated] AS [DateCreated0], [x].[DateModified] AS [DateModified0], [x].[Status] AS [Status0], [x].[SeoPageTitle] AS [SeoPageTitle0], [x].[SeoAlias] AS [SeoAlias0], [x].[SeoKeywords] AS [SeoKeywords0], [x].[SeoDescription] AS [SeoDescription0], [x.BlogCategory].[Id]
+FROM [Blogs] AS [x]
+LEFT JOIN [BlogCategories] AS [x.BlogCategory] ON [x].[CategoryId] = [x.BlogCategory].[Id]
+WHERE [x].[Status] = 1
+ORDER BY [DateCreated0] DESC, [x].[Id], [x.BlogCategory].[Id]" (0723d8ff)
+2020-04-11T21:30:16.9068315+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("7"ms) [Parameters=["@__p_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[DateCreated], [t].[Id], [x.BlogTags].[BlogId], [x.BlogTags].[TagId]
+FROM [BlogTags] AS [x.BlogTags]
+INNER JOIN (
+    SELECT TOP(@__p_0) [x0].[DateCreated], [x0].[Id]
+    FROM [Blogs] AS [x0]
+    LEFT JOIN [BlogCategories] AS [x.BlogCategory0] ON [x0].[CategoryId] = [x.BlogCategory0].[Id]
+    WHERE [x0].[Status] = 1
+    ORDER BY [x0].[DateCreated] DESC, [x0].[Id]
+) AS [t] ON [x.BlogTags].[BlogId] = [t].[Id]
+ORDER BY [t].[DateCreated] DESC, [t].[Id]" (0723d8ff)
+2020-04-11T21:30:16.9216208+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("11"ms) [Parameters=["@__p_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t0].[DateCreated], [t0].[Id], [t0].[Id0], [x.BlogCategory.Blogs].[Id] AS [Id1], [x.BlogCategory.Blogs].[Name], [x.BlogCategory.Blogs].[CategoryId], [x.BlogCategory.Blogs].[Image], [x.BlogCategory.Blogs].[Description], [x.BlogCategory.Blogs].[Content], [x.BlogCategory.Blogs].[HomeFlag], [x.BlogCategory.Blogs].[HotFlag], [x.BlogCategory.Blogs].[ViewCount], [x.BlogCategory.Blogs].[Tags], [x.BlogCategory.Blogs].[DateCreated] AS [DateCreated0], [x.BlogCategory.Blogs].[DateModified], [x.BlogCategory.Blogs].[Status], [x.BlogCategory.Blogs].[SeoPageTitle], [x.BlogCategory.Blogs].[SeoAlias], [x.BlogCategory.Blogs].[SeoKeywords], [x.BlogCategory.Blogs].[SeoDescription]
+FROM [Blogs] AS [x.BlogCategory.Blogs]
+INNER JOIN (
+    SELECT TOP(@__p_0) [x1].[DateCreated], [x1].[Id], [x.BlogCategory1].[Id] AS [Id0]
+    FROM [Blogs] AS [x1]
+    LEFT JOIN [BlogCategories] AS [x.BlogCategory1] ON [x1].[CategoryId] = [x.BlogCategory1].[Id]
+    WHERE [x1].[Status] = 1
+    ORDER BY [x1].[DateCreated] DESC, [x1].[Id], [x.BlogCategory1].[Id]
+) AS [t0] ON [x.BlogCategory.Blogs].[CategoryId] = [t0].[Id0]
+ORDER BY [t0].[DateCreated] DESC, [t0].[Id], [t0].[Id0], [x.BlogCategory.Blogs].[Id]" (0723d8ff)
+2020-04-11T21:30:16.9423619+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("13"ms) [Parameters=["@__p_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t2].[DateCreated], [t2].[Id], [t2].[Id0], [t2].[Id1], [x.BlogCategory.Blogs.BlogTags].[BlogId], [x.BlogCategory.Blogs.BlogTags].[TagId]
+FROM [BlogTags] AS [x.BlogCategory.Blogs.BlogTags]
+INNER JOIN (
+    SELECT [t1].[DateCreated], [t1].[Id], [t1].[Id0], [x.BlogCategory.Blogs0].[Id] AS [Id1]
+    FROM [Blogs] AS [x.BlogCategory.Blogs0]
+    INNER JOIN (
+        SELECT TOP(@__p_0) [x2].[DateCreated], [x2].[Id], [x.BlogCategory2].[Id] AS [Id0]
+        FROM [Blogs] AS [x2]
+        LEFT JOIN [BlogCategories] AS [x.BlogCategory2] ON [x2].[CategoryId] = [x.BlogCategory2].[Id]
+        WHERE [x2].[Status] = 1
+        ORDER BY [x2].[DateCreated] DESC, [x2].[Id], [x.BlogCategory2].[Id]
+    ) AS [t1] ON [x.BlogCategory.Blogs0].[CategoryId] = [t1].[Id0]
+) AS [t2] ON [x.BlogCategory.Blogs.BlogTags].[BlogId] = [t2].[Id1]
+ORDER BY [t2].[DateCreated] DESC, [t2].[Id], [t2].[Id0], [t2].[Id1]" (0723d8ff)
+2020-04-11T21:30:16.9791052+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("3"ms) [Parameters=["@__groupAlias_0='?' (Size = 25)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [x].[Id], [x].[Name], [x].[Description], [x].[Image], [x].[Url], [x].[DisplayOrder], [x].[Status], [x].[Content], [x].[GroupAlias]
+FROM [Slides] AS [x]
+WHERE ([x].[Status] = 1) AND ([x].[GroupAlias] = @__groupAlias_0)" (0723d8ff)
+2020-04-11T21:30:17.2965193+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed action method "LACoreApp.Controllers.HomeController.Index (LACoreApp)", returned result "Microsoft.AspNetCore.Mvc.ViewResult" in 1618.6963ms. (50a9e262)
+2020-04-11T21:30:17.3376441+07:00 0HLUU4JCUPCG1:00000001 [INF] Executing ViewResult, running view "Index". (c83d0e25)
+2020-04-11T21:30:17.6383458+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("24"ms) [Parameters=["@__group_0='?' (DbType = Int32), @__status_1='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [x].[Id], [x].[Name], [x].[URL], [x].[ParentId], [x].[Group], [x].[SortOrder], [x].[Status], [x].[Type]
+FROM [Menus] AS [x]
+WHERE ([x].[Group] = @__group_0) AND ([x].[Status] = @__status_1)
+ORDER BY [x].[SortOrder]" (0723d8ff)
+2020-04-11T21:30:17.7380175+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [x].[Id], [x].[Name], [x].[Description], [x].[ParentId], [x].[HomeOrder], [x].[Image], [x].[HomeFlag], [x].[DateCreated], [x].[DateModified], [x].[SortOrder], [x].[Status], [x].[SeoPageTitle], [x].[SeoAlias], [x].[SeoKeywords], [x].[SeoDescription]
+FROM [BlogCategories] AS [x]
+ORDER BY [x].[ParentId], [x].[Id]" (0723d8ff)
+2020-04-11T21:30:17.7468774+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[ParentId], [t].[Id], [x.Blogs].[Id] AS [Id0], [x.Blogs].[Name], [x.Blogs].[CategoryId], [x.Blogs].[Image], [x.Blogs].[Description], [x.Blogs].[Content], [x.Blogs].[HomeFlag], [x.Blogs].[HotFlag], [x.Blogs].[ViewCount], [x.Blogs].[Tags], [x.Blogs].[DateCreated], [x.Blogs].[DateModified], [x.Blogs].[Status], [x.Blogs].[SeoPageTitle], [x.Blogs].[SeoAlias], [x.Blogs].[SeoKeywords], [x.Blogs].[SeoDescription]
+FROM [Blogs] AS [x.Blogs]
+INNER JOIN (
+    SELECT [x0].[ParentId], [x0].[Id]
+    FROM [BlogCategories] AS [x0]
+) AS [t] ON [x.Blogs].[CategoryId] = [t].[Id]
+ORDER BY [t].[ParentId], [t].[Id], [x.Blogs].[Id]" (0723d8ff)
+2020-04-11T21:30:17.7806099+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("18"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [t1].[ParentId], [t1].[Id], [t1].[Id0], [x.Blogs.BlogTags].[BlogId], [x.Blogs.BlogTags].[TagId]
+FROM [BlogTags] AS [x.Blogs.BlogTags]
+INNER JOIN (
+    SELECT [t0].[ParentId], [t0].[Id], [x.Blogs0].[Id] AS [Id0]
+    FROM [Blogs] AS [x.Blogs0]
+    INNER JOIN (
+        SELECT [x1].[ParentId], [x1].[Id]
+        FROM [BlogCategories] AS [x1]
+    ) AS [t0] ON [x.Blogs0].[CategoryId] = [t0].[Id]
+) AS [t1] ON [x.Blogs.BlogTags].[BlogId] = [t1].[Id0]
+ORDER BY [t1].[ParentId], [t1].[Id], [t1].[Id0]" (0723d8ff)
+2020-04-11T21:30:17.8556899+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [x].[Id], [x].[Name], [x].[Description], [x].[ParentId], [x].[HomeOrder], [x].[Image], [x].[HomeFlag], [x].[DateCreated], [x].[DateModified], [x].[SortOrder], [x].[Status], [x].[SeoPageTitle], [x].[SeoAlias], [x].[SeoKeywords], [x].[SeoDescription]
+FROM [ProductCategories] AS [x]
+ORDER BY [x].[ParentId], [x].[Id]" (0723d8ff)
+2020-04-11T21:30:17.9261244+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed DbCommand ("54"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[ParentId], [t].[Id], [x.Products].[Id] AS [Id0], [x.Products].[Name], [x.Products].[CategoryId], [x.Products].[Image], [x.Products].[Price], [x.Products].[PromotionPrice], [x.Products].[OriginalPrice], [x.Products].[Description], [x.Products].[Content], [x.Products].[HomeFlag], [x.Products].[HotFlag], [x.Products].[ViewCount], [x.Products].[Tags], [x.Products].[Unit], [x.Products].[SeoPageTitle], [x.Products].[SeoAlias], [x.Products].[SeoKeywords], [x.Products].[SeoDescription], [x.Products].[DateCreated], [x.Products].[DateModified], [x.Products].[Status]
+FROM [Products] AS [x.Products]
+INNER JOIN (
+    SELECT [x0].[ParentId], [x0].[Id]
+    FROM [ProductCategories] AS [x0]
+) AS [t] ON [x.Products].[CategoryId] = [t].[Id]
+ORDER BY [t].[ParentId], [t].[Id]" (0723d8ff)
+2020-04-11T21:30:18.0637160+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed ViewResult - view "Index" executed in 744.6237ms. (f66409e9)
+2020-04-11T21:30:18.0784701+07:00 0HLUU4JCUPCG1:00000001 [INF] Executed action "LACoreApp.Controllers.HomeController.Index (LACoreApp)" in 2432.4074ms (afa2e885)
+2020-04-11T21:30:18.8267009+07:00 0HLUU4JCUPCG1:00000001 [INF] Request finished in 3495.386ms 200 text/html; charset=utf-8 (791a596a)
+2020-04-11T21:30:18.8671096+07:00 0HLUU4JCUPCG1:00000002 [INF] Request starting HTTP/1.1 GET http://localhost:3000/lib/notifyjs/dist/styles/metro/notify-metro.css   (ca22a1cb)
+2020-04-11T21:30:18.8671379+07:00 0HLUU4JCUPCG2:00000001 [INF] Request starting HTTP/1.1 GET http://localhost:3000/client-side/style.css   (ca22a1cb)
+2020-04-11T21:30:18.8683394+07:00 0HLUU4JCUPCG3:00000001 [INF] Request starting HTTP/1.1 GET http://localhost:3000/uploaded/images/20200329/1566804384272.jfif   (ca22a1cb)
+2020-04-11T21:30:18.8789944+07:00 0HLUU4JCUPCG1:00000002 [INF] The file "/lib/notifyjs/dist/styles/metro/notify-metro.css" was not modified (f1f8d725)
+2020-04-11T21:30:18.8789944+07:00 0HLUU4JCUPCG3:00000001 [INF] The file "/uploaded/images/20200329/1566804384272.jfif" was not modified (f1f8d725)
+2020-04-11T21:30:18.8790797+07:00 0HLUU4JCUPCG2:00000001 [INF] The file "/client-side/style.css" was not modified (f1f8d725)
+2020-04-11T21:30:18.8813224+07:00 0HLUU4JCUPCG4:00000001 [INF] Request starting HTTP/1.1 GET http://localhost:3000/uploaded/images/20200405/nuoi day con.jfif   (ca22a1cb)
+2020-04-11T21:30:18.8819078+07:00 0HLUU4JCUPCG4:00000001 [INF] The file "/uploaded/images/20200405/nuoi day con.jfif" was not modified (f1f8d725)
+2020-04-11T21:30:18.8828906+07:00 0HLUU4JCUPCG2:00000001 [INF] Request finished in 15.7301ms 304 text/css (791a596a)
+2020-04-11T21:30:18.8828906+07:00 0HLUU4JCUPCG3:00000001 [INF] Request finished in 14.6284ms 304 image/pjpeg (791a596a)
+2020-04-11T21:30:18.8828907+07:00 0HLUU4JCUPCG4:00000001 [INF] Request finished in 1.8962ms 304 image/pjpeg (791a596a)
+2020-04-11T21:30:18.8828907+07:00 0HLUU4JCUPCG1:00000002 [INF] Request finished in 16.8809ms 304 text/css (791a596a)
+2020-04-11T21:30:18.9976380+07:00 0HLUU4JCUPCG3:00000002 [INF] Request starting HTTP/1.1 GET http://localhost:3000/lib/notifyjs/dist/styles/metro/notify-metro.js   (ca22a1cb)
+2020-04-11T21:30:18.9978025+07:00 0HLUU4JCUPCG2:00000002 [INF] Request starting HTTP/1.1 GET http://localhost:3000/lib/notifyjs/dist/notify.js   (ca22a1cb)
+2020-04-11T21:30:18.9980794+07:00 0HLUU4JCUPCG3:00000002 [INF] The file "/lib/notifyjs/dist/styles/metro/notify-metro.js" was not modified (f1f8d725)
+2020-04-11T21:30:18.9980795+07:00 0HLUU4JCUPCG2:00000002 [INF] The file "/lib/notifyjs/dist/notify.js" was not modified (f1f8d725)
+2020-04-11T21:30:18.9981631+07:00 0HLUU4JCUPCG3:00000002 [INF] Request finished in 0.6753ms 304 application/javascript (791a596a)
+2020-04-11T21:30:18.9982108+07:00 0HLUU4JCUPCG2:00000002 [INF] Request finished in 0.3729ms 304 application/javascript (791a596a)
+2020-04-11T21:30:18.9999331+07:00 0HLUU4JCUPCG4:00000002 [INF] Request starting HTTP/1.1 GET http://localhost:3000/client-app/shared/localize/resources.vi-VN.js   (ca22a1cb)
+2020-04-11T21:30:19.0001127+07:00 0HLUU4JCUPCG1:00000003 [INF] Request starting HTTP/1.1 GET http://localhost:3000/lib/mustache/mustache.js   (ca22a1cb)
+2020-04-11T21:30:19.0001752+07:00 0HLUU4JCUPCG4:00000002 [INF] The file "/client-app/shared/localize/resources.vi-VN.js" was not modified (f1f8d725)
+2020-04-11T21:30:19.0002375+07:00 0HLUU4JCUPCG1:00000003 [INF] The file "/lib/mustache/mustache.js" was not modified (f1f8d725)
+2020-04-11T21:30:19.0002503+07:00 0HLUU4JCUPCG4:00000002 [INF] Request finished in 0.3899ms 304 application/javascript (791a596a)
+2020-04-11T21:30:19.0002810+07:00 0HLUU4JCUPCG1:00000003 [INF] Request finished in 0.2006ms 304 application/javascript (791a596a)
+2020-04-11T21:30:19.0015937+07:00 0HLUU4JCUPCG3:00000003 [INF] Request starting HTTP/1.1 GET http://localhost:3000/client-app/controllers/base/index.js   (ca22a1cb)
+2020-04-11T21:30:19.0023292+07:00 0HLUU4JCUPCG3:00000003 [INF] The file "/client-app/controllers/base/index.js" was not modified (f1f8d725)
+2020-04-11T21:30:19.0024074+07:00 0HLUU4JCUPCG2:00000003 [INF] Request starting HTTP/1.1 GET http://localhost:3000/client-app/shared/tedu.js   (ca22a1cb)
+2020-04-11T21:30:19.0024310+07:00 0HLUU4JCUPCG3:00000003 [INF] Request finished in 0.9432ms 304 application/javascript (791a596a)
+2020-04-11T21:30:19.0026138+07:00 0HLUU4JCUPCG2:00000003 [INF] The file "/client-app/shared/tedu.js" was not modified (f1f8d725)
+2020-04-11T21:30:19.0026901+07:00 0HLUU4JCUPCG2:00000003 [INF] Request finished in 0.3059ms 304 application/javascript (791a596a)
+2020-04-11T21:30:19.0073196+07:00 0HLUU4JCUPCG4:00000003 [INF] Request starting HTTP/1.1 GET http://localhost:3000/client-app/controllers/home/index.js   (ca22a1cb)
+2020-04-11T21:30:19.0077982+07:00 0HLUU4JCUPCG4:00000003 [INF] The file "/client-app/controllers/home/index.js" was not modified (f1f8d725)
+2020-04-11T21:30:19.0083519+07:00 0HLUU4JCUPCG4:00000003 [INF] Request finished in 1.7783ms 304 application/javascript (791a596a)
+2020-04-11T21:30:19.0177054+07:00 0HLUU4JCUPCG1:00000004 [INF] Request starting HTTP/1.1 GET http://localhost:3000/uploaded/images/20200404/Chu_sau_hau_an.jpg   (ca22a1cb)
+2020-04-11T21:30:19.0180898+07:00 0HLUU4JCUPCG1:00000004 [INF] The file "/uploaded/images/20200404/Chu_sau_hau_an.jpg" was not modified (f1f8d725)
+2020-04-11T21:30:19.0186293+07:00 0HLUU4JCUPCG1:00000004 [INF] Request finished in 0.7788ms 304 image/jpeg (791a596a)
+2020-04-11T21:30:19.0190956+07:00 0HLUU4JCUPCG3:00000004 [INF] Request starting HTTP/1.1 GET http://localhost:3000/uploaded/images/20200405/IMG_8046 (1).jpg   (ca22a1cb)
+2020-04-11T21:30:19.0196047+07:00 0HLUU4JCUPCG2:00000004 [INF] Request starting HTTP/1.1 GET http://localhost:3000/uploaded/images/20200404/1566804384272.jfif   (ca22a1cb)
+2020-04-11T21:30:19.0203032+07:00 0HLUU4JCUPCG2:00000004 [INF] The file "/uploaded/images/20200404/1566804384272.jfif" was not modified (f1f8d725)
+2020-04-11T21:30:19.0204076+07:00 0HLUU4JCUPCG2:00000004 [INF] Request finished in 0.8332ms 304 image/pjpeg (791a596a)
+2020-04-11T21:30:19.0211691+07:00 0HLUU4JCUPCG4:00000004 [INF] Request starting HTTP/1.1 GET http://localhost:3000/uploaded/images/20200404/Money-in-jar.jpg   (ca22a1cb)
+2020-04-11T21:30:19.0214368+07:00 0HLUU4JCUPCG4:00000004 [INF] The file "/uploaded/images/20200404/Money-in-jar.jpg" was not modified (f1f8d725)
+2020-04-11T21:30:19.0215318+07:00 0HLUU4JCUPCG4:00000004 [INF] Request finished in 0.4033ms 304 image/jpeg (791a596a)
+2020-04-11T21:30:19.0217325+07:00 0HLUU4JCUPCG1:00000005 [INF] Request starting HTTP/1.1 GET http://localhost:3000/uploaded/images/20200404/Cach cha me day con quan ly tien tu nho.jpg   (ca22a1cb)
+2020-04-11T21:30:19.0219257+07:00 0HLUU4JCUPCG1:00000005 [INF] The file "/uploaded/images/20200404/Cach cha me day con quan ly tien tu nho.jpg" was not modified (f1f8d725)
+2020-04-11T21:30:19.0220886+07:00 0HLUU4JCUPCG1:00000005 [INF] Request finished in 0.3675ms 304 image/jpeg (791a596a)
+2020-04-11T21:30:19.0242625+07:00 0HLUU4JCUPCG3:00000004 [INF] The file "/uploaded/images/20200405/IMG_8046 (1).jpg" was not modified (f1f8d725)
+2020-04-11T21:30:19.0244715+07:00 0HLUU4JCUPCG3:00000004 [INF] Request finished in 5.3777ms 304 image/jpeg (791a596a)
+2020-04-11T21:30:19.0347312+07:00 0HLUU4JCUPCG2:00000005 [INF] Request starting HTTP/1.1 GET http://localhost:3000/client-side/css/style.css   (ca22a1cb)
+2020-04-11T21:30:19.0351414+07:00 0HLUU4JCUPCG2:00000005 [INF] The file "/client-side/css/style.css" was not modified (f1f8d725)
+2020-04-11T21:30:19.0354057+07:00 0HLUU4JCUPCG2:00000005 [INF] Request finished in 0.7115ms 304 text/css (791a596a)
+2020-04-11T21:30:19.0369834+07:00 0HLUU4JCUPCG4:00000005 [INF] Request starting HTTP/1.1 GET http://localhost:3000/client-side/css/responsive.css   (ca22a1cb)
+2020-04-11T21:30:19.0372866+07:00 0HLUU4JCUPCG4:00000005 [INF] The file "/client-side/css/responsive.css" was not modified (f1f8d725)
+2020-04-11T21:30:19.0374098+07:00 0HLUU4JCUPCG4:00000005 [INF] Request finished in 0.4917ms 304 text/css (791a596a)
+2020-04-11T21:30:19.0394650+07:00 0HLUU4JCUPCG1:00000006 [INF] Request starting HTTP/1.1 GET http://localhost:3000/client-side/css/font-awesome.css   (ca22a1cb)
+2020-04-11T21:30:19.0447859+07:00 0HLUU4JCUPCG1:00000006 [INF] The file "/client-side/css/font-awesome.css" was not modified (f1f8d725)
+2020-04-11T21:30:19.0449701+07:00 0HLUU4JCUPCG1:00000006 [INF] Request finished in 5.8068ms 304 text/css (791a596a)
+2020-04-11T21:30:19.0519860+07:00 0HLUU4JCUPCG3:00000005 [INF] Request starting HTTP/1.1 GET http://localhost:3000/uploaded/images/20200331/van hoa doanh nghiep.jpg   (ca22a1cb)
+2020-04-11T21:30:19.0532332+07:00 0HLUU4JCUPCG3:00000005 [INF] The file "/uploaded/images/20200331/van hoa doanh nghiep.jpg" was not modified (f1f8d725)
+2020-04-11T21:30:19.0534012+07:00 0HLUU4JCUPCG3:00000005 [INF] Request finished in 1.4583ms 304 image/jpeg (791a596a)
+2020-04-11T21:31:30.4372131+07:00 0HLUU4K3AU1AT:00000001 [INF] Request starting HTTP/1.1 GET http://localhost:3000/   (ca22a1cb)
+2020-04-11T21:31:30.6924029+07:00 0HLUU4K3AU1AT:00000001 [INF] Route matched with "{action = \"Index\", controller = \"Home\", area = \"\"}". Executing controller action with signature "Microsoft.AspNetCore.Mvc.IActionResult Index()" on controller "LACoreApp.Controllers.HomeController" ("LACoreApp"). (122b2fdf)
+2020-04-11T21:31:30.7028393+07:00 0HLUU4K3AU1AT:00000001 [INF] Executing action method "LACoreApp.Controllers.HomeController.Index (LACoreApp)" - Validation state: Valid (dad538d7)
+2020-04-11T21:31:30.7137467+07:00 0HLUU4K3AU1AT:00000001 [INF] Entity Framework Core "2.1.14-servicing-32113" initialized '"AppDbContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "MigrationsAssembly=LACoreApp.Data.EF " (9958f5bb)
+2020-04-11T21:31:30.8071183+07:00 0HLUU4K3AU1AT:00000001 [WRN] The Include operation for navigation '"[c].Blogs"' is unnecessary and was ignored because the navigation is not reachable in the final query results. See https://go.microsoft.com/fwlink/?linkid=850303 for more information. (10efaee6)
+2020-04-11T21:31:30.8941036+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("20"ms) [Parameters=["@__p_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(@__p_0) [c].[Id], [c].[Name], [c].[Description], [c].[ParentId], [c].[HomeOrder], [c].[Image], [c].[HomeFlag], [c].[DateCreated], [c].[DateModified], [c].[SortOrder], [c].[Status], [c].[SeoPageTitle], [c].[SeoAlias], [c].[SeoKeywords], [c].[SeoDescription]
+FROM [BlogCategories] AS [c]
+WHERE [c].[HomeFlag] = 1
+ORDER BY [c].[HomeOrder], [c].[Id]" (0723d8ff)
+2020-04-11T21:31:30.9307400+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("10"ms) [Parameters=["@__p_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[HomeOrder], [t].[Id], [c.Blogs].[Id] AS [Id0], [c.Blogs].[Name], [c.Blogs].[CategoryId], [c.Blogs].[Image], [c.Blogs].[Description], [c.Blogs].[Content], [c.Blogs].[HomeFlag], [c.Blogs].[HotFlag], [c.Blogs].[ViewCount], [c.Blogs].[Tags], [c.Blogs].[DateCreated], [c.Blogs].[DateModified], [c.Blogs].[Status], [c.Blogs].[SeoPageTitle], [c.Blogs].[SeoAlias], [c.Blogs].[SeoKeywords], [c.Blogs].[SeoDescription]
+FROM [Blogs] AS [c.Blogs]
+INNER JOIN (
+    SELECT TOP(@__p_0) [c0].[HomeOrder], [c0].[Id]
+    FROM [BlogCategories] AS [c0]
+    WHERE [c0].[HomeFlag] = 1
+    ORDER BY [c0].[HomeOrder], [c0].[Id]
+) AS [t] ON [c.Blogs].[CategoryId] = [t].[Id]
+ORDER BY [t].[HomeOrder], [t].[Id], [c.Blogs].[Id]" (0723d8ff)
+2020-04-11T21:31:31.0519051+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("101"ms) [Parameters=["@__p_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t1].[HomeOrder], [t1].[Id], [t1].[Id0], [c.Blogs.BlogTags].[BlogId], [c.Blogs.BlogTags].[TagId]
+FROM [BlogTags] AS [c.Blogs.BlogTags]
+INNER JOIN (
+    SELECT [t0].[HomeOrder], [t0].[Id], [c.Blogs0].[Id] AS [Id0]
+    FROM [Blogs] AS [c.Blogs0]
+    INNER JOIN (
+        SELECT TOP(@__p_0) [c1].[HomeOrder], [c1].[Id]
+        FROM [BlogCategories] AS [c1]
+        WHERE [c1].[HomeFlag] = 1
+        ORDER BY [c1].[HomeOrder], [c1].[Id]
+    ) AS [t0] ON [c.Blogs0].[CategoryId] = [t0].[Id]
+) AS [t1] ON [c.Blogs.BlogTags].[BlogId] = [t1].[Id0]
+ORDER BY [t1].[HomeOrder], [t1].[Id], [t1].[Id0]" (0723d8ff)
+2020-04-11T21:31:31.1651378+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("6"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__category_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(@__p_1) [x].[Id], [x].[Name], [x].[CategoryId], [x].[Image], [x].[Description], [x].[Content], [x].[HomeFlag], [x].[HotFlag], [x].[ViewCount], [x].[Tags], CASE
+    WHEN [x].[CategoryId] IS NOT NULL
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END, [x].[CategoryId] AS [Id0], [x.BlogCategory].[Name] AS [Name0], [x.BlogCategory].[Description] AS [Description0], [x.BlogCategory].[ParentId], [x.BlogCategory].[HomeOrder], [x.BlogCategory].[Image] AS [Image0], [x.BlogCategory].[HomeFlag] AS [HomeFlag0], [x.BlogCategory].[DateCreated], [x.BlogCategory].[DateModified], [x.BlogCategory].[SortOrder], [x.BlogCategory].[Status], [x.BlogCategory].[SeoPageTitle], [x.BlogCategory].[SeoAlias], [x.BlogCategory].[SeoKeywords], [x.BlogCategory].[SeoDescription], [x].[DateCreated] AS [DateCreated0], [x].[DateModified] AS [DateModified0], [x].[Status] AS [Status0], [x].[SeoPageTitle] AS [SeoPageTitle0], [x].[SeoAlias] AS [SeoAlias0], [x].[SeoKeywords] AS [SeoKeywords0], [x].[SeoDescription] AS [SeoDescription0], [x.BlogCategory].[Id]
+FROM [Blogs] AS [x]
+LEFT JOIN [BlogCategories] AS [x.BlogCategory] ON [x].[CategoryId] = [x.BlogCategory].[Id]
+WHERE [x].[CategoryId] = @__category_Id_0
+ORDER BY [DateCreated0] DESC, [x].[Id], [x.BlogCategory].[Id]" (0723d8ff)
+2020-04-11T21:31:31.1821175+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("6"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__category_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[DateCreated], [t].[Id], [x.BlogTags].[BlogId], [x.BlogTags].[TagId]
+FROM [BlogTags] AS [x.BlogTags]
+INNER JOIN (
+    SELECT TOP(@__p_1) [x0].[DateCreated], [x0].[Id]
+    FROM [Blogs] AS [x0]
+    LEFT JOIN [BlogCategories] AS [x.BlogCategory0] ON [x0].[CategoryId] = [x.BlogCategory0].[Id]
+    WHERE [x0].[CategoryId] = @__category_Id_0
+    ORDER BY [x0].[DateCreated] DESC, [x0].[Id]
+) AS [t] ON [x.BlogTags].[BlogId] = [t].[Id]
+ORDER BY [t].[DateCreated] DESC, [t].[Id]" (0723d8ff)
+2020-04-11T21:31:31.1911287+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("5"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__category_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t0].[DateCreated], [t0].[Id], [t0].[Id0], [x.BlogCategory.Blogs].[Id] AS [Id1], [x.BlogCategory.Blogs].[Name], [x.BlogCategory.Blogs].[CategoryId], [x.BlogCategory.Blogs].[Image], [x.BlogCategory.Blogs].[Description], [x.BlogCategory.Blogs].[Content], [x.BlogCategory.Blogs].[HomeFlag], [x.BlogCategory.Blogs].[HotFlag], [x.BlogCategory.Blogs].[ViewCount], [x.BlogCategory.Blogs].[Tags], [x.BlogCategory.Blogs].[DateCreated] AS [DateCreated0], [x.BlogCategory.Blogs].[DateModified], [x.BlogCategory.Blogs].[Status], [x.BlogCategory.Blogs].[SeoPageTitle], [x.BlogCategory.Blogs].[SeoAlias], [x.BlogCategory.Blogs].[SeoKeywords], [x.BlogCategory.Blogs].[SeoDescription]
+FROM [Blogs] AS [x.BlogCategory.Blogs]
+INNER JOIN (
+    SELECT TOP(@__p_1) [x1].[DateCreated], [x1].[Id], [x.BlogCategory1].[Id] AS [Id0]
+    FROM [Blogs] AS [x1]
+    LEFT JOIN [BlogCategories] AS [x.BlogCategory1] ON [x1].[CategoryId] = [x.BlogCategory1].[Id]
+    WHERE [x1].[CategoryId] = @__category_Id_0
+    ORDER BY [x1].[DateCreated] DESC, [x1].[Id], [x.BlogCategory1].[Id]
+) AS [t0] ON [x.BlogCategory.Blogs].[CategoryId] = [t0].[Id0]
+ORDER BY [t0].[DateCreated] DESC, [t0].[Id], [t0].[Id0], [x.BlogCategory.Blogs].[Id]" (0723d8ff)
+2020-04-11T21:31:31.2054968+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("8"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__category_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t2].[DateCreated], [t2].[Id], [t2].[Id0], [t2].[Id1], [x.BlogCategory.Blogs.BlogTags].[BlogId], [x.BlogCategory.Blogs.BlogTags].[TagId]
+FROM [BlogTags] AS [x.BlogCategory.Blogs.BlogTags]
+INNER JOIN (
+    SELECT [t1].[DateCreated], [t1].[Id], [t1].[Id0], [x.BlogCategory.Blogs0].[Id] AS [Id1]
+    FROM [Blogs] AS [x.BlogCategory.Blogs0]
+    INNER JOIN (
+        SELECT TOP(@__p_1) [x2].[DateCreated], [x2].[Id], [x.BlogCategory2].[Id] AS [Id0]
+        FROM [Blogs] AS [x2]
+        LEFT JOIN [BlogCategories] AS [x.BlogCategory2] ON [x2].[CategoryId] = [x.BlogCategory2].[Id]
+        WHERE [x2].[CategoryId] = @__category_Id_0
+        ORDER BY [x2].[DateCreated] DESC, [x2].[Id], [x.BlogCategory2].[Id]
+    ) AS [t1] ON [x.BlogCategory.Blogs0].[CategoryId] = [t1].[Id0]
+) AS [t2] ON [x.BlogCategory.Blogs.BlogTags].[BlogId] = [t2].[Id1]
+ORDER BY [t2].[DateCreated] DESC, [t2].[Id], [t2].[Id0], [t2].[Id1]" (0723d8ff)
+2020-04-11T21:31:31.2133880+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("1"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__category_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(@__p_1) [x].[Id], [x].[Name], [x].[CategoryId], [x].[Image], [x].[Description], [x].[Content], [x].[HomeFlag], [x].[HotFlag], [x].[ViewCount], [x].[Tags], CASE
+    WHEN [x].[CategoryId] IS NOT NULL
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END, [x].[CategoryId] AS [Id0], [x.BlogCategory].[Name] AS [Name0], [x.BlogCategory].[Description] AS [Description0], [x.BlogCategory].[ParentId], [x.BlogCategory].[HomeOrder], [x.BlogCategory].[Image] AS [Image0], [x.BlogCategory].[HomeFlag] AS [HomeFlag0], [x.BlogCategory].[DateCreated], [x.BlogCategory].[DateModified], [x.BlogCategory].[SortOrder], [x.BlogCategory].[Status], [x.BlogCategory].[SeoPageTitle], [x.BlogCategory].[SeoAlias], [x.BlogCategory].[SeoKeywords], [x.BlogCategory].[SeoDescription], [x].[DateCreated] AS [DateCreated0], [x].[DateModified] AS [DateModified0], [x].[Status] AS [Status0], [x].[SeoPageTitle] AS [SeoPageTitle0], [x].[SeoAlias] AS [SeoAlias0], [x].[SeoKeywords] AS [SeoKeywords0], [x].[SeoDescription] AS [SeoDescription0], [x.BlogCategory].[Id]
+FROM [Blogs] AS [x]
+LEFT JOIN [BlogCategories] AS [x.BlogCategory] ON [x].[CategoryId] = [x.BlogCategory].[Id]
+WHERE [x].[CategoryId] = @__category_Id_0
+ORDER BY [DateCreated0] DESC, [x].[Id], [x.BlogCategory].[Id]" (0723d8ff)
+2020-04-11T21:31:31.2169470+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("3"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__category_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[DateCreated], [t].[Id], [x.BlogTags].[BlogId], [x.BlogTags].[TagId]
+FROM [BlogTags] AS [x.BlogTags]
+INNER JOIN (
+    SELECT TOP(@__p_1) [x0].[DateCreated], [x0].[Id]
+    FROM [Blogs] AS [x0]
+    LEFT JOIN [BlogCategories] AS [x.BlogCategory0] ON [x0].[CategoryId] = [x.BlogCategory0].[Id]
+    WHERE [x0].[CategoryId] = @__category_Id_0
+    ORDER BY [x0].[DateCreated] DESC, [x0].[Id]
+) AS [t] ON [x.BlogTags].[BlogId] = [t].[Id]
+ORDER BY [t].[DateCreated] DESC, [t].[Id]" (0723d8ff)
+2020-04-11T21:31:31.2210884+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("4"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__category_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t0].[DateCreated], [t0].[Id], [t0].[Id0], [x.BlogCategory.Blogs].[Id] AS [Id1], [x.BlogCategory.Blogs].[Name], [x.BlogCategory.Blogs].[CategoryId], [x.BlogCategory.Blogs].[Image], [x.BlogCategory.Blogs].[Description], [x.BlogCategory.Blogs].[Content], [x.BlogCategory.Blogs].[HomeFlag], [x.BlogCategory.Blogs].[HotFlag], [x.BlogCategory.Blogs].[ViewCount], [x.BlogCategory.Blogs].[Tags], [x.BlogCategory.Blogs].[DateCreated] AS [DateCreated0], [x.BlogCategory.Blogs].[DateModified], [x.BlogCategory.Blogs].[Status], [x.BlogCategory.Blogs].[SeoPageTitle], [x.BlogCategory.Blogs].[SeoAlias], [x.BlogCategory.Blogs].[SeoKeywords], [x.BlogCategory.Blogs].[SeoDescription]
+FROM [Blogs] AS [x.BlogCategory.Blogs]
+INNER JOIN (
+    SELECT TOP(@__p_1) [x1].[DateCreated], [x1].[Id], [x.BlogCategory1].[Id] AS [Id0]
+    FROM [Blogs] AS [x1]
+    LEFT JOIN [BlogCategories] AS [x.BlogCategory1] ON [x1].[CategoryId] = [x.BlogCategory1].[Id]
+    WHERE [x1].[CategoryId] = @__category_Id_0
+    ORDER BY [x1].[DateCreated] DESC, [x1].[Id], [x.BlogCategory1].[Id]
+) AS [t0] ON [x.BlogCategory.Blogs].[CategoryId] = [t0].[Id0]
+ORDER BY [t0].[DateCreated] DESC, [t0].[Id], [t0].[Id0], [x.BlogCategory.Blogs].[Id]" (0723d8ff)
+2020-04-11T21:31:31.2280494+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("6"ms) [Parameters=["@__p_1='?' (DbType = Int32), @__category_Id_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t2].[DateCreated], [t2].[Id], [t2].[Id0], [t2].[Id1], [x.BlogCategory.Blogs.BlogTags].[BlogId], [x.BlogCategory.Blogs.BlogTags].[TagId]
+FROM [BlogTags] AS [x.BlogCategory.Blogs.BlogTags]
+INNER JOIN (
+    SELECT [t1].[DateCreated], [t1].[Id], [t1].[Id0], [x.BlogCategory.Blogs0].[Id] AS [Id1]
+    FROM [Blogs] AS [x.BlogCategory.Blogs0]
+    INNER JOIN (
+        SELECT TOP(@__p_1) [x2].[DateCreated], [x2].[Id], [x.BlogCategory2].[Id] AS [Id0]
+        FROM [Blogs] AS [x2]
+        LEFT JOIN [BlogCategories] AS [x.BlogCategory2] ON [x2].[CategoryId] = [x.BlogCategory2].[Id]
+        WHERE [x2].[CategoryId] = @__category_Id_0
+        ORDER BY [x2].[DateCreated] DESC, [x2].[Id], [x.BlogCategory2].[Id]
+    ) AS [t1] ON [x.BlogCategory.Blogs0].[CategoryId] = [t1].[Id0]
+) AS [t2] ON [x.BlogCategory.Blogs.BlogTags].[BlogId] = [t2].[Id1]
+ORDER BY [t2].[DateCreated] DESC, [t2].[Id], [t2].[Id0], [t2].[Id1]" (0723d8ff)
+2020-04-11T21:31:31.2761742+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("6"ms) [Parameters=["@__p_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(@__p_0) [x].[Id], [x].[Name], [x].[CategoryId], [x].[Image], [x].[Description], [x].[Content], [x].[HomeFlag], [x].[HotFlag], [x].[ViewCount], [x].[Tags], CASE
+    WHEN [x].[CategoryId] IS NOT NULL
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END, [x].[CategoryId] AS [Id0], [x.BlogCategory].[Name] AS [Name0], [x.BlogCategory].[Description] AS [Description0], [x.BlogCategory].[ParentId], [x.BlogCategory].[HomeOrder], [x.BlogCategory].[Image] AS [Image0], [x.BlogCategory].[HomeFlag] AS [HomeFlag0], [x.BlogCategory].[DateCreated], [x.BlogCategory].[DateModified], [x.BlogCategory].[SortOrder], [x.BlogCategory].[Status], [x.BlogCategory].[SeoPageTitle], [x.BlogCategory].[SeoAlias], [x.BlogCategory].[SeoKeywords], [x.BlogCategory].[SeoDescription], [x].[DateCreated] AS [DateCreated0], [x].[DateModified] AS [DateModified0], [x].[Status] AS [Status0], [x].[SeoPageTitle] AS [SeoPageTitle0], [x].[SeoAlias] AS [SeoAlias0], [x].[SeoKeywords] AS [SeoKeywords0], [x].[SeoDescription] AS [SeoDescription0], [x.BlogCategory].[Id]
+FROM [Blogs] AS [x]
+LEFT JOIN [BlogCategories] AS [x.BlogCategory] ON [x].[CategoryId] = [x.BlogCategory].[Id]
+WHERE [x].[Status] = 1
+ORDER BY [DateCreated0] DESC, [x].[Id], [x.BlogCategory].[Id]" (0723d8ff)
+2020-04-11T21:31:31.2905174+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("13"ms) [Parameters=["@__p_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[DateCreated], [t].[Id], [x.BlogTags].[BlogId], [x.BlogTags].[TagId]
+FROM [BlogTags] AS [x.BlogTags]
+INNER JOIN (
+    SELECT TOP(@__p_0) [x0].[DateCreated], [x0].[Id]
+    FROM [Blogs] AS [x0]
+    LEFT JOIN [BlogCategories] AS [x.BlogCategory0] ON [x0].[CategoryId] = [x.BlogCategory0].[Id]
+    WHERE [x0].[Status] = 1
+    ORDER BY [x0].[DateCreated] DESC, [x0].[Id]
+) AS [t] ON [x.BlogTags].[BlogId] = [t].[Id]
+ORDER BY [t].[DateCreated] DESC, [t].[Id]" (0723d8ff)
+2020-04-11T21:31:31.2957539+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("4"ms) [Parameters=["@__p_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t0].[DateCreated], [t0].[Id], [t0].[Id0], [x.BlogCategory.Blogs].[Id] AS [Id1], [x.BlogCategory.Blogs].[Name], [x.BlogCategory.Blogs].[CategoryId], [x.BlogCategory.Blogs].[Image], [x.BlogCategory.Blogs].[Description], [x.BlogCategory.Blogs].[Content], [x.BlogCategory.Blogs].[HomeFlag], [x.BlogCategory.Blogs].[HotFlag], [x.BlogCategory.Blogs].[ViewCount], [x.BlogCategory.Blogs].[Tags], [x.BlogCategory.Blogs].[DateCreated] AS [DateCreated0], [x.BlogCategory.Blogs].[DateModified], [x.BlogCategory.Blogs].[Status], [x.BlogCategory.Blogs].[SeoPageTitle], [x.BlogCategory.Blogs].[SeoAlias], [x.BlogCategory.Blogs].[SeoKeywords], [x.BlogCategory.Blogs].[SeoDescription]
+FROM [Blogs] AS [x.BlogCategory.Blogs]
+INNER JOIN (
+    SELECT TOP(@__p_0) [x1].[DateCreated], [x1].[Id], [x.BlogCategory1].[Id] AS [Id0]
+    FROM [Blogs] AS [x1]
+    LEFT JOIN [BlogCategories] AS [x.BlogCategory1] ON [x1].[CategoryId] = [x.BlogCategory1].[Id]
+    WHERE [x1].[Status] = 1
+    ORDER BY [x1].[DateCreated] DESC, [x1].[Id], [x.BlogCategory1].[Id]
+) AS [t0] ON [x.BlogCategory.Blogs].[CategoryId] = [t0].[Id0]
+ORDER BY [t0].[DateCreated] DESC, [t0].[Id], [t0].[Id0], [x.BlogCategory.Blogs].[Id]" (0723d8ff)
+2020-04-11T21:31:31.3022758+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("5"ms) [Parameters=["@__p_0='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [t2].[DateCreated], [t2].[Id], [t2].[Id0], [t2].[Id1], [x.BlogCategory.Blogs.BlogTags].[BlogId], [x.BlogCategory.Blogs.BlogTags].[TagId]
+FROM [BlogTags] AS [x.BlogCategory.Blogs.BlogTags]
+INNER JOIN (
+    SELECT [t1].[DateCreated], [t1].[Id], [t1].[Id0], [x.BlogCategory.Blogs0].[Id] AS [Id1]
+    FROM [Blogs] AS [x.BlogCategory.Blogs0]
+    INNER JOIN (
+        SELECT TOP(@__p_0) [x2].[DateCreated], [x2].[Id], [x.BlogCategory2].[Id] AS [Id0]
+        FROM [Blogs] AS [x2]
+        LEFT JOIN [BlogCategories] AS [x.BlogCategory2] ON [x2].[CategoryId] = [x.BlogCategory2].[Id]
+        WHERE [x2].[Status] = 1
+        ORDER BY [x2].[DateCreated] DESC, [x2].[Id], [x.BlogCategory2].[Id]
+    ) AS [t1] ON [x.BlogCategory.Blogs0].[CategoryId] = [t1].[Id0]
+) AS [t2] ON [x.BlogCategory.Blogs.BlogTags].[BlogId] = [t2].[Id1]
+ORDER BY [t2].[DateCreated] DESC, [t2].[Id], [t2].[Id0], [t2].[Id1]" (0723d8ff)
+2020-04-11T21:31:31.3685975+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("3"ms) [Parameters=["@__groupAlias_0='?' (Size = 25)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [x].[Id], [x].[Name], [x].[Description], [x].[Image], [x].[Url], [x].[DisplayOrder], [x].[Status], [x].[Content], [x].[GroupAlias]
+FROM [Slides] AS [x]
+WHERE ([x].[Status] = 1) AND ([x].[GroupAlias] = @__groupAlias_0)" (0723d8ff)
+2020-04-11T21:31:31.5153779+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed action method "LACoreApp.Controllers.HomeController.Index (LACoreApp)", returned result "Microsoft.AspNetCore.Mvc.ViewResult" in 809.1583ms. (50a9e262)
+2020-04-11T21:31:31.5336803+07:00 0HLUU4K3AU1AT:00000001 [INF] Executing ViewResult, running view "Index". (c83d0e25)
+2020-04-11T21:31:31.6684217+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("20"ms) [Parameters=["@__group_0='?' (DbType = Int32), @__status_1='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [x].[Id], [x].[Name], [x].[URL], [x].[ParentId], [x].[Group], [x].[SortOrder], [x].[Status], [x].[Type]
+FROM [Menus] AS [x]
+WHERE ([x].[Group] = @__group_0) AND ([x].[Status] = @__status_1)
+ORDER BY [x].[SortOrder]" (0723d8ff)
+2020-04-11T21:31:31.7522181+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [x].[Id], [x].[Name], [x].[Description], [x].[ParentId], [x].[HomeOrder], [x].[Image], [x].[HomeFlag], [x].[DateCreated], [x].[DateModified], [x].[SortOrder], [x].[Status], [x].[SeoPageTitle], [x].[SeoAlias], [x].[SeoKeywords], [x].[SeoDescription]
+FROM [BlogCategories] AS [x]
+ORDER BY [x].[ParentId], [x].[Id]" (0723d8ff)
+2020-04-11T21:31:31.7597829+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[ParentId], [t].[Id], [x.Blogs].[Id] AS [Id0], [x.Blogs].[Name], [x.Blogs].[CategoryId], [x.Blogs].[Image], [x.Blogs].[Description], [x.Blogs].[Content], [x.Blogs].[HomeFlag], [x.Blogs].[HotFlag], [x.Blogs].[ViewCount], [x.Blogs].[Tags], [x.Blogs].[DateCreated], [x.Blogs].[DateModified], [x.Blogs].[Status], [x.Blogs].[SeoPageTitle], [x.Blogs].[SeoAlias], [x.Blogs].[SeoKeywords], [x.Blogs].[SeoDescription]
+FROM [Blogs] AS [x.Blogs]
+INNER JOIN (
+    SELECT [x0].[ParentId], [x0].[Id]
+    FROM [BlogCategories] AS [x0]
+) AS [t] ON [x.Blogs].[CategoryId] = [t].[Id]
+ORDER BY [t].[ParentId], [t].[Id], [x.Blogs].[Id]" (0723d8ff)
+2020-04-11T21:31:31.7881541+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("11"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [t1].[ParentId], [t1].[Id], [t1].[Id0], [x.Blogs.BlogTags].[BlogId], [x.Blogs.BlogTags].[TagId]
+FROM [BlogTags] AS [x.Blogs.BlogTags]
+INNER JOIN (
+    SELECT [t0].[ParentId], [t0].[Id], [x.Blogs0].[Id] AS [Id0]
+    FROM [Blogs] AS [x.Blogs0]
+    INNER JOIN (
+        SELECT [x1].[ParentId], [x1].[Id]
+        FROM [BlogCategories] AS [x1]
+    ) AS [t0] ON [x.Blogs0].[CategoryId] = [t0].[Id]
+) AS [t1] ON [x.Blogs.BlogTags].[BlogId] = [t1].[Id0]
+ORDER BY [t1].[ParentId], [t1].[Id], [t1].[Id0]" (0723d8ff)
+2020-04-11T21:31:31.8305673+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [x].[Id], [x].[Name], [x].[Description], [x].[ParentId], [x].[HomeOrder], [x].[Image], [x].[HomeFlag], [x].[DateCreated], [x].[DateModified], [x].[SortOrder], [x].[Status], [x].[SeoPageTitle], [x].[SeoAlias], [x].[SeoKeywords], [x].[SeoDescription]
+FROM [ProductCategories] AS [x]
+ORDER BY [x].[ParentId], [x].[Id]" (0723d8ff)
+2020-04-11T21:31:31.8501126+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [t].[ParentId], [t].[Id], [x.Products].[Id] AS [Id0], [x.Products].[Name], [x.Products].[CategoryId], [x.Products].[Image], [x.Products].[Price], [x.Products].[PromotionPrice], [x.Products].[OriginalPrice], [x.Products].[Description], [x.Products].[Content], [x.Products].[HomeFlag], [x.Products].[HotFlag], [x.Products].[ViewCount], [x.Products].[Tags], [x.Products].[Unit], [x.Products].[SeoPageTitle], [x.Products].[SeoAlias], [x.Products].[SeoKeywords], [x.Products].[SeoDescription], [x.Products].[DateCreated], [x.Products].[DateModified], [x.Products].[Status]
+FROM [Products] AS [x.Products]
+INNER JOIN (
+    SELECT [x0].[ParentId], [x0].[Id]
+    FROM [ProductCategories] AS [x0]
+) AS [t] ON [x.Products].[CategoryId] = [t].[Id]
+ORDER BY [t].[ParentId], [t].[Id]" (0723d8ff)
+2020-04-11T21:31:31.9052989+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed ViewResult - view "Index" executed in 380.4526ms. (f66409e9)
+2020-04-11T21:31:31.9113983+07:00 0HLUU4K3AU1AT:00000001 [INF] Executed action "LACoreApp.Controllers.HomeController.Index (LACoreApp)" in 1218.6128ms (afa2e885)
+2020-04-11T21:31:32.2546710+07:00 0HLUU4K3AU1AT:00000001 [INF] Request finished in 1823.0851ms 200 text/html; charset=utf-8 (791a596a)

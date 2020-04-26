@@ -1,4 +1,6 @@
-﻿@using Microsoft.AspNetCore.Localization
+﻿@using LACoreApp.Utilities.Common
+@using Microsoft.AspNetCore.Http.Extensions
+@using Microsoft.AspNetCore.Localization
 @{
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
 }
@@ -12,14 +14,39 @@
     <![endif]-->
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>@ViewData["Title"]</title>
+    @if (ViewData["amphtml"] != null)
+    {
+        <link rel="amphtml" href="@ViewData["amphtml"]">
+    }
     <meta name="description" content="@ViewData["MetaKeyword"]">
     <meta name="keywords" content="@ViewData["MetaDescription"]" />
+    <meta content="nguyenthuylinh.net" name="GENERATOR" />
+    <meta content="Nguyen Thi Thuy Linh" name="author" />
+    <meta content="text/javascript" http-equiv="Content-Script-Type" />
+    <meta content="vi" http-equiv="content-language" />
+    <meta name="robots" content="INDEX, FOLLOW" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="alternate" href="@ConfigurationManager.GetUrlRoot()" hreflang="vi-vn" />
 
-    <!-- Mobile specific metas  -->
+    <!-- Open Graph data -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="@ViewData["Title"]" />
+    <meta property="og:description" content="@ViewData["MetaDescription"]" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="@ViewData["MetaImage"]" />
+    <meta property="og:url" content="@Url.Action()" />
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" value="summary">
+    <meta name="twitter:site" content="@ConfigurationManager.GetUrlRoot()">
+    <meta name="twitter:title" content="@ViewData["Title"]">
+    <meta name="twitter:description" content="@ViewData["MetaDescription"]">
+    <meta name="twitter:creator" content="Nguyen Thi Thuy Linh">
+    <meta name="twitter:image" content="@ViewData["MetaImage"]">
 
     <!-- Favicons Icon -->
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
     <link href="~/lib/notifyjs/dist/styles/metro/notify-metro.css" rel="stylesheet" />
     <!-- CSS Style -->
     <link rel="stylesheet" href="~/client-side/style.css">
@@ -42,7 +69,7 @@
     <script src="~/client-side/js/wow.min.js"></script>
     <script src="~/client-side/js/call-option.js"></script>
     <script src="~/client-side/js/common.js"></script>
-   
+
     <script src="~/lib/notifyjs/dist/notify.js"></script>
     <script src="~/lib/notifyjs/dist/styles/metro/notify-metro.js"></script>
     <script src="~/lib/mustache/mustache.js"></script>
@@ -54,6 +81,24 @@
         var baseObj = new BaseController();
         baseObj.initialize();
     </script>
+    @if (ViewData["ArticleJson"] != null)
+    {
+        <script type="application/ld+json">
+            @Html.Raw(ViewData["ArticleJson"])
+        </script>
+    }
+    @if (ViewData["BreadCrumbJson"] != null)
+    {
+        <script type="application/ld+json">
+            @Html.Raw(ViewData["BreadCrumbJson"])
+        </script>
+    }
+    @if (ViewData["WebsiteJson"] != null)
+    {
+        <script type="application/ld+json">
+            @Html.Raw(ViewData["WebsiteJson"])
+        </script>
+    }
     @RenderSection("Scripts", required: false)
 
 </body>

@@ -38,7 +38,7 @@ namespace LACoreApp.Application.Dapper.Implementation
                     return await sqlConnection.QueryAsync<RevenueReportViewModel>(
                         "GetRevenueDaily", dynamicParameters, commandType: CommandType.StoredProcedure);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
                 }

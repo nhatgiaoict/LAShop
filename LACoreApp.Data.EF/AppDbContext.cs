@@ -13,6 +13,7 @@ using LACoreApp.Data.Interfaces;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
 namespace LACoreApp.Data.EF
 {
@@ -105,6 +106,10 @@ namespace LACoreApp.Data.EF
                     if (item.State == EntityState.Added)
                     {
                         changedOrAddedItem.DateCreated = DateTime.Now;
+                    }
+                    else
+                    {
+                        base.Entry(changedOrAddedItem).Property(x => x.DateCreated).IsModified = false;
                     }
                     changedOrAddedItem.DateModified = DateTime.Now;
                 }

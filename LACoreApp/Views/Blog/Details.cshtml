@@ -1,83 +1,86 @@
-﻿@model LACoreApp.Models.BlogViewModels.DetailViewModel
+﻿@using LACoreApp.Utilities.Common
+@model LACoreApp.Models.BlogViewModels.DetailViewModel
 @{
-    ViewData["Title"] = Model.Blog.Name;
+    ViewData["Title"] = Model.Blog.SeoPageTitle;
     ViewData["MetaKeyword"] = Model.Blog.SeoKeywords;
     ViewData["MetaDescription"] = Model.Blog.SeoDescription;
+    ViewData["MetaImage"] = ConfigurationManager.GetUrlRoot() + Model.Blog.Image;
     var blog = Model.Blog;
 }
-<section id="news-cate">
-    <div class="heading-catagories">
-    </div>
-    <!--End-->
-    <div class="container mobile-no-padding-left-right">
-        <div class="row">
-            <div class="sidebar-left col-md-8 col-sm-8 col-xs-12">
-                <div class="bg-news">
-                    <article class="thumbnail-news-view">
-                        <h1>
-                            @blog.Name
-                        </h1>
-                        <div class="block_timer_share">
-                            <div class="block_timer pull-left">
-                                <i class="fa fa-clock-o"></i>
-                                @blog.DateCreated.ToString("dd-MM-yyyy")
-                            </div>
-                            <div class="block_share pull-right">
-                                @*<div class="fb-like" style="float: left" data-href="<%=Globals.UrlHot %>/<%=Request.RawUrl %>" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>*@
-                                <div class="g-plusone" data-size="medium" data-width="50" data-annotation="bubble" data-align="right"></div>
-                                <div class="g-plus" data-action="share" data-annotation="bubble" data-align="right">&nbsp;&nbsp;</div>
-                            </div>
-                        </div>
-                        <div class="post_content">
-                            @Html.Raw(blog.Content)
-                        </div>
-
-                        <ul class="other-news-detail">
-                            <h2>Bài viết khác</h2>
-                            @foreach (var item in Model.RelatedBlogs)
-                            {
-                                var url = "/" + item.SeoAlias + "-b-" + item.Id + ".html";
-                                <li>
-                                    <figure>
-                                        <a href="@url">
-                                            <img src="@item.Image" alt="@item.Name" />
-                                        </a>
-                                    </figure>
-                                    <figcaption><a href="@url"><h4>@item.Name</h4></a></figcaption>
-                                </li>
-                            }
-                            @foreach (var item in Model.LastestBlogs)
-                            {
-                                var url = "/" + item.SeoAlias + "-b-" + item.Id + ".html";
-                                <li>
-                                    <figure>
-                                        <a href="@url">
-                                            <img src="@item.Image" alt="@item.Name" />
-                                        </a>
-                                    </figure>
-                                    <figcaption><a href="@url"><h4>@item.Name</h4></a></figcaption>
-                                </li>
-                            }
-                        </ul>
-                    </article>
-                </div>
-                <!--End-->
-            </div>
-            <!--End-sidebar-left-->
-
-            <div class="sidebar-right col-md-4 col-sm-4 col-xs-12">
-                @(await Component.InvokeAsync("MostViews"))
-            </div>
-            <!--End-sidebar-right-->
+    <section id="news-cate">
+        @{ var urlBackground = string.IsNullOrEmpty(Model.Category.Image) ? "images/background.jpg" : Model.Category.Image;}
+        <div class="heading-catagories" style="background-image: url('@urlBackground');">
         </div>
-    </div>
-</section>
+        <!--End-->
+        <div class="container mobile-no-padding-left-right">
+            <div class="row">
+                <div class="sidebar-left col-md-8 col-sm-8 col-xs-12">
+                    <div class="bg-news">
+                        <article class="thumbnail-news-view">
+                            <h1>
+                                @blog.Name
+                            </h1>
+                            <div class="block_timer_share">
+                                <div class="block_timer pull-left">
+                                    <i class="fa fa-clock-o"></i>
+                                    @blog.DateCreated.ToString("dd-MM-yyyy")
+                                </div>
+                                <div class="block_share pull-right">
+                                    @*<div class="fb-like" style="float: left" data-href="<%=Globals.UrlHot %>/<%=Request.RawUrl %>" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>*@
+                                    <div class="g-plusone" data-size="medium" data-width="50" data-annotation="bubble" data-align="right"></div>
+                                    <div class="g-plus" data-action="share" data-annotation="bubble" data-align="right">&nbsp;&nbsp;</div>
+                                </div>
+                            </div>
+                            <div class="post_content">
+                                @Html.Raw(blog.Content)
+                            </div>
+
+                            <ul class="other-news-detail">
+                                <h2>Bài viết khác</h2>
+                                @foreach (var item in Model.RelatedBlogs)
+                            {
+                                var url = "/" + item.SeoAlias + "-b-" + item.Id + ".html";
+                                <li>
+                                    <figure>
+                                        <a href="@url">
+                                            <img src="@item.Image" alt="@item.Name" />
+                                        </a>
+                                    </figure>
+                                    <figcaption><a href="@url"><h4>@item.Name</h4></a></figcaption>
+                                </li>
+                            }
+                                @*@foreach (var item in Model.LastestBlogs)
+                                {
+                                    var url = "/" + item.SeoAlias + "-b-" + item.Id + ".html";
+                                    <li>
+                                        <figure>
+                                            <a href="@url">
+                                                <img src="@item.Image" alt="@item.Name" />
+                                            </a>
+                                        </figure>
+                                        <figcaption><a href="@url"><h4>@item.Name</h4></a></figcaption>
+                                    </li>
+                                }*@
+                            </ul>
+                        </article>
+                    </div>
+                    <!--End-->
+                </div>
+                <!--End-sidebar-left-->
+
+                <div class="sidebar-right col-md-4 col-sm-4 col-xs-12">
+                    @(await Component.InvokeAsync("MostViews"))
+                </div>
+                <!--End-sidebar-right-->
+            </div>
+        </div>
+    </section>
 <script>
-(function (d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.7";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.7";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
