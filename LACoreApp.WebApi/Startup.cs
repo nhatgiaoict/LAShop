@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using System.Runtime.CompilerServices;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,7 @@ using LACoreApp.Application.Implementation;
 using LACoreApp.Application.Interfaces;
 using LACoreApp.Data.EF;
 using LACoreApp.Infrastructure.Interfaces;
+using Microsoft.Extensions.Hosting;
 
 namespace LACoreApp.WebApi
 {
@@ -44,9 +47,8 @@ namespace LACoreApp.WebApi
 
             services.AddTransient<IProductCategoryService, ProductCategoryService>();
 
-            services.AddMvc().
-                AddJsonOptions(options =>
-                options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
             services.AddSwaggerGen(s =>
             {
@@ -62,9 +64,9 @@ namespace LACoreApp.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (env.EnvironmentName== Environments.Development)
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -72,17 +74,29 @@ namespace LACoreApp.WebApi
             app.UseStaticFiles();
             app.UseCors("TeduCorsPolicy");
 
-            app.UseSwagger();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    "default"
+                    , "{controller=Home}/{action=Index}/{id?}");
+            });
+
+
+            app.UseSwagger(c =>
+            {
+                c.PreSerializeFilters.Add((document, request) =>
+                {
+                    var paths = document.Paths.ToDictionary(item => item.Key.ToLowerInvariant(), item => item.Value);
+                    document.Paths.Clear();
+                    foreach (var pathItem in paths)
+                    {
+                        document.Paths.Add(pathItem.Key, pathItem.Value);
+                    }
+                });
+            });
             app.UseSwaggerUI(s =>
             {
                 s.SwaggerEndpoint("/swagger/v1/swagger.json", "Project API v1.1");
-            });
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

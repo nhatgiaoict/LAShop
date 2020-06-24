@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -27,9 +25,13 @@ using LACoreApp.Application.Dapper.Interfaces;
 using LACoreApp.Application.Dapper.Implementation;
 using Microsoft.AspNetCore.Mvc.Razor;
 using System.Globalization;
+using LACoreApp.Middleware;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
 using LACoreApp.SignalR;
+using LACoreApp.Utilities.Stream;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 
 namespace LACoreApp
 {
@@ -94,7 +96,8 @@ namespace LACoreApp
                     facebookOpts.AppId = Configuration["Authentication:Facebook:AppId"];
                     facebookOpts.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
                 })
-                .AddGoogle(googleOpts=> {
+                .AddGoogle(googleOpts =>
+                {
                     googleOpts.ClientId = Configuration["Authentication:Google:ClientId"];
                     googleOpts.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
                 });
@@ -112,24 +115,26 @@ namespace LACoreApp
 
             services.AddScoped<IUserClaimsPrincipalFactory<AppUser>, CustomClaimsPrincipalFactory>();
 
-            services.AddMvc(options =>
-            {
-                options.CacheProfiles.Add("Default",
-                    new CacheProfile()
-                    {
-                        Duration = 60
-                    });
-                options.CacheProfiles.Add("Never",
-                    new CacheProfile()
-                    {
-                        Location = ResponseCacheLocation.None,
-                        NoStore = true
-                    });
-            }).AddViewLocalization(
+            services.AddControllersWithViews(options =>
+                {
+                    options.CacheProfiles.Add("Default",
+                        new CacheProfile()
+                        {
+                            Duration = 60
+                        });
+                    options.CacheProfiles.Add("Never",
+                        new CacheProfile()
+                        {
+                            Location = ResponseCacheLocation.None,
+                            NoStore = true
+                        });
+                }).AddViewLocalization(
                     LanguageViewLocationExpanderFormat.Suffix,
                     opts => { opts.ResourcesPath = "Resources"; })
                 .AddDataAnnotationsLocalization()
-                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
+            services.AddRazorPages();
 
             services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
 
@@ -152,10 +157,10 @@ namespace LACoreApp
                   };
 
                   opts.DefaultRequestCulture = new RequestCulture("en-US");
-                   // Formatting numbers, dates, etc.
-                   opts.SupportedCultures = supportedCultures;
-                   // UI strings that we have localized.
-                   opts.SupportedUICultures = supportedCultures;
+                  // Formatting numbers, dates, etc.
+                  opts.SupportedCultures = supportedCultures;
+                  // UI strings that we have localized.
+                  opts.SupportedUICultures = supportedCultures;
               });
 
             services.AddTransient(typeof(IUnitOfWork), typeof(EFUnitOfWork));
@@ -184,14 +189,14 @@ namespace LACoreApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddFile("Logs/la-{Date}.txt");
-            if (env.IsDevelopment())
+            if (env.EnvironmentName == Environments.Development)
             {
                 app.UseDeveloperExceptionPage();
                 //app.UseBrowserLink();
-                app.UseDatabaseErrorPage();
+                //app.UseDatabaseErrorPage();
             }
             else
             {
@@ -199,30 +204,44 @@ namespace LACoreApp
             }
             app.UseImageResizer();
             app.UseStaticFiles();
+            
             app.UseMinResponse();
+
+
+            app.UseModifyHtmlMiddleware();
+            app.UseRouting();
+            
+            //app.Map("/amp",
+            //    appBuilder => { appBuilder.UseAmpImageMiddleware(); });
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UseSession();
 
             var options = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(options.Value);
             app.UseCors("CorsPolicy");
-            app.UseSignalR(routes =>
+            //app.Map("/amp", HandleMultiSeg);
+            //app.Map("/amp",
+            //    appBuilder => { appBuilder.UseAmpImageMiddleware(); });
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapHub<TeduHub>("/teduHub");
+                endpoints.MapControllerRoute(
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}"
+                );
+                endpoints.MapControllerRoute(
+                    "areaRoute",
+                    "{area:exists}/{controller=Login}/{action=Index}/{id?}");
+                //endpoints.MapGet("/amp/{Details}", async (context) =>
+                //{
+                //    var html = ProcessRequest.ModifyRequest(context);
+                //    await context.Response.WriteAsync(html);
+                //});
+                endpoints.MapRazorPages();
+                endpoints.MapHub<TeduHub>("/teduHub");
+
             });
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-
-                routes.MapRoute(name: "areaRoute",
-                    template: "{area:exists}/{controller=Login}/{action=Index}/{id?}");
-
-
-            });
-
         }
     }
+
 }

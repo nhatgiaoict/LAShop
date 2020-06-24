@@ -11,7 +11,6 @@ using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
 
 namespace LACoreApp.Controllers
 {
-    [UseAmpImage]
     public class AmpController : Controller
     {
         private readonly IBlogService _blogService;

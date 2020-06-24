@@ -14,10 +14,10 @@ namespace LACoreApp.Areas.Admin.Controllers
 {
     public class UploadController : BaseController
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
-        public UploadController(IHostingEnvironment hostingEnvironment)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public UploadController(IWebHostEnvironment webHostEnvironment)
         {
-            _hostingEnvironment = hostingEnvironment;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpPost]
@@ -38,7 +38,7 @@ namespace LACoreApp.Areas.Admin.Controllers
 
                 var imageFolder = $@"\uploaded\images\{now.ToString("yyyyMMdd")}";
 
-                string folder = _hostingEnvironment.WebRootPath + imageFolder;
+                string folder = _webHostEnvironment.WebRootPath + imageFolder;
 
                 if (!Directory.Exists(folder))
                 {
@@ -76,7 +76,7 @@ namespace LACoreApp.Areas.Admin.Controllers
 
                 var imageFolder = $@"\uploaded\images\{now.ToString("yyyyMMdd")}";
 
-                string folder = _hostingEnvironment.WebRootPath + imageFolder;
+                string folder = _webHostEnvironment.WebRootPath + imageFolder;
 
                 if (!Directory.Exists(folder))
                 {

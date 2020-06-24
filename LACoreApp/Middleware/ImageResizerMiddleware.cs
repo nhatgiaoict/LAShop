@@ -43,7 +43,7 @@ namespace LACoreApp.Middleware
 
         private readonly RequestDelegate _next;
         private readonly ILogger<ImageResizerMiddleware> _logger;
-        private readonly IHostingEnvironment _env;
+        private readonly IWebHostEnvironment _env;
         private readonly IMemoryCache _memoryCache;
 
         private static readonly string[] suffixes = new string[] {
@@ -52,7 +52,7 @@ namespace LACoreApp.Middleware
             ".jpeg"
         };
 
-        public ImageResizerMiddleware(RequestDelegate next, IHostingEnvironment env, ILogger<ImageResizerMiddleware> logger, IMemoryCache memoryCache)
+        public ImageResizerMiddleware(RequestDelegate next, IWebHostEnvironment env, ILogger<ImageResizerMiddleware> logger, IMemoryCache memoryCache)
         {
             _next = next;
             _env = env;

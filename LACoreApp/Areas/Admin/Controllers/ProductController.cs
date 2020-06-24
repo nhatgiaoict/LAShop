@@ -19,15 +19,15 @@ namespace LACoreApp.Areas.Admin.Controllers
     {
         private IProductService _productService;
         private IProductCategoryService _productCategoryService;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public ProductController(IProductService productService, 
             IProductCategoryService productCategoryService,
-            IHostingEnvironment hostingEnvironment)
+            IWebHostEnvironment webHostEnvironment)
         {
             _productService = productService;
             _productCategoryService = productCategoryService;
-            _hostingEnvironment = hostingEnvironment;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
@@ -159,7 +159,7 @@ namespace LACoreApp.Areas.Admin.Controllers
                                    .FileName
                                    .Trim('"');
 
-                string folder = _hostingEnvironment.WebRootPath + $@"\uploaded\excels";
+                string folder = _webHostEnvironment.WebRootPath + $@"\uploaded\excels";
                 if (!Directory.Exists(folder))
                 {
                     Directory.CreateDirectory(folder);
@@ -180,7 +180,7 @@ namespace LACoreApp.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult ExportExcel()
         {
-            string sWebRootFolder = _hostingEnvironment.WebRootPath;
+            string sWebRootFolder = _webHostEnvironment.WebRootPath;
             string directory = Path.Combine(sWebRootFolder, "export-files");
             if (!Directory.Exists(directory))
             {

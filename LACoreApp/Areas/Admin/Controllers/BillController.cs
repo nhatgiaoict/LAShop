@@ -19,11 +19,11 @@ namespace LACoreApp.Areas.Admin.Controllers
     public class BillController : BaseController
     {
         private readonly IBillService _billService;
-        private readonly IHostingEnvironment _hostingEnvironment;
-        public BillController(IBillService billService, IHostingEnvironment hostingEnvironment)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public BillController(IBillService billService, IWebHostEnvironment webHostEnvironment)
         {
             _billService = billService;
-            _hostingEnvironment = hostingEnvironment;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
@@ -110,7 +110,7 @@ namespace LACoreApp.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult ExportExcel(int billId)
         {
-            string sWebRootFolder = _hostingEnvironment.WebRootPath;
+            string sWebRootFolder = _webHostEnvironment.WebRootPath;
             string sFileName = $"Bill_{billId}.xlsx";
             // Template File
             string templateDocument = Path.Combine(sWebRootFolder, "templates", "BillTemplate.xlsx");

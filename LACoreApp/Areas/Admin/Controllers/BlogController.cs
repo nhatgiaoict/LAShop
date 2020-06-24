@@ -15,13 +15,13 @@ namespace LACoreApp.Areas.Admin.Controllers
     {
         private readonly IBlogService _blogService;
         private readonly IBlogCategoryService _blogCategoryService;
-        private readonly IHostingEnvironment _hostingEnviroment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public BlogController(IBlogService blogService, IBlogCategoryService blogCategoryService, IHostingEnvironment hostingEnvironment)
+        public BlogController(IBlogService blogService, IBlogCategoryService blogCategoryService, IWebHostEnvironment webHostEnvironment)
         {
             _blogService = blogService;
             _blogCategoryService = blogCategoryService;
-            _hostingEnviroment = hostingEnvironment;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
