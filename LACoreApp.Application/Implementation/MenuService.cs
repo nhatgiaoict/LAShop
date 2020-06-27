@@ -56,21 +56,20 @@ namespace LACoreApp.Application.Implementation
                                        .Where(x => !parentId.HasValue || x.ParentId == parentId)
                                        .Where(x => !group.HasValue || x.Group == group)
                                        .Where(x => !status.HasValue || x.Status == status);
-            return query.OrderBy(x => x.SortOrder).ProjectTo<MenuViewModel>().ToListAsync();
+            return _mapper.ProjectTo<MenuViewModel>(query.OrderBy(x => x.SortOrder)).ToListAsync();
 
         }
 
         public IEnumerable<MenuViewModel> GetAllWithParentId(Guid parentId)
         {
-            return _menuRepository.FindAll(x => x.ParentId == parentId)
-                                  .OrderBy(x => x.SortOrder)
-                                  .ProjectTo<MenuViewModel>();
+            return _mapper.ProjectTo<MenuViewModel>(_menuRepository.FindAll(x => x.ParentId == parentId)
+                                  .OrderBy(x => x.SortOrder));
         }
 
         public MenuViewModel GetById(Guid id)
         {
             var menu = _menuRepository.FindSingle(x => x.Id == id);
-            return Mapper.Map<Menu, MenuViewModel>(menu);
+            return _mapper.Map<Menu, MenuViewModel>(menu);
         }
 
 

@@ -17,15 +17,17 @@ namespace LACoreApp.Application.Implementation
     {
         private IRepository<Slide, int> _slideRepository;
         private IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
         public SlideService(IRepository<Slide, int> slideRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, IMapper mapper)
         {
             this._slideRepository = slideRepository;
             this._unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         public void Add(SlideViewModel slideVm)
         {
-            var slide = Mapper.Map<SlideViewModel, Slide>(slideVm);
+            var slide = _mapper.Map<SlideViewModel, Slide>(slideVm);
             _slideRepository.Add(slide);
         }
 
@@ -41,7 +43,7 @@ namespace LACoreApp.Application.Implementation
 
         public List<SlideViewModel> GetAll()
         {
-            return _slideRepository.FindAll().ProjectTo<SlideViewModel>().ToList();
+            return _mapper.ProjectTo<SlideViewModel>(_slideRepository.FindAll()).ToList();
         }
 
         public PagedResult<SlideViewModel> GetAllPaging(string keyword, int page, int pageSize)
@@ -57,7 +59,7 @@ namespace LACoreApp.Application.Implementation
 
             var paginationSet = new PagedResult<SlideViewModel>()
             {
-                Results = data.ProjectTo<SlideViewModel>().ToList(),
+                Results = _mapper.ProjectTo<SlideViewModel>(data).ToList(),
                 CurrentPage = page,
                 RowCount = totalRow,
                 PageSize = pageSize
@@ -68,7 +70,7 @@ namespace LACoreApp.Application.Implementation
 
         public SlideViewModel GetById(int id)
         {
-            return Mapper.Map<Slide, SlideViewModel>(_slideRepository.FindById(id));
+            return _mapper.Map<Slide, SlideViewModel>(_slideRepository.FindById(id));
         }
 
         public void SaveChanges()
@@ -78,7 +80,7 @@ namespace LACoreApp.Application.Implementation
 
         public void Update(SlideViewModel slideVm)
         {
-            var slide = Mapper.Map<SlideViewModel, Slide>(slideVm);
+            var slide = _mapper.Map<SlideViewModel, Slide>(slideVm);
             _slideRepository.Update(slide);
         }
     }

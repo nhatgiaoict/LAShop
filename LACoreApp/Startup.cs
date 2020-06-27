@@ -1,37 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using LACoreApp.Services;
+﻿using AutoMapper;
+using LACoreApp.Application.AutoMapper;
+using LACoreApp.Application.Dapper.Implementation;
+using LACoreApp.Application.Dapper.Interfaces;
+using LACoreApp.Application.Implementation;
+using LACoreApp.Application.Interfaces;
+using LACoreApp.Authorization;
 using LACoreApp.Data.EF;
 using LACoreApp.Data.Entities;
-using AutoMapper;
-using LACoreApp.Application.Interfaces;
-using LACoreApp.Application.Implementation;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Serialization;
+using LACoreApp.Extensions;
 using LACoreApp.Helpers;
 using LACoreApp.Infrastructure.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using LACoreApp.Authorization;
-using PaulMiami.AspNetCore.Mvc.Recaptcha;
-using LACoreApp.Extensions;
-using Microsoft.AspNetCore.Mvc;
-using LACoreApp.Application.Dapper.Interfaces;
-using LACoreApp.Application.Dapper.Implementation;
-using Microsoft.AspNetCore.Mvc.Razor;
-using System.Globalization;
-using LACoreApp.Middleware;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.Extensions.Options;
+using LACoreApp.Services;
 using LACoreApp.SignalR;
-using LACoreApp.Utilities.Stream;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Serialization;
+using PaulMiami.AspNetCore.Mvc.Recaptcha;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace LACoreApp
 {
@@ -47,7 +48,7 @@ namespace LACoreApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options =>
+            services.AddDbContextPool<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                 o => o.MigrationsAssembly("LACoreApp.Data.EF")));
 
@@ -82,15 +83,28 @@ namespace LACoreApp
                 SiteKey = Configuration["Recaptcha:SiteKey"],
                 SecretKey = Configuration["Recaptcha:SecretKey"]
             });
+            // If using Kestrel:
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
+            // If using IIS:
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AllowSynchronousIO = true;
+            });
 
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromHours(2);
                 options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.IsEssential = true;
             });
             services.AddImageResizer();
-            services.AddAutoMapper();
-            services.AddAuthentication()
+            services.AddSingleton(AutoMapperConfig.RegisterMappings().CreateMapper());
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddFacebook(facebookOpts =>
                 {
                     facebookOpts.AppId = Configuration["Authentication:Facebook:AppId"];
@@ -100,13 +114,16 @@ namespace LACoreApp
                 {
                     googleOpts.ClientId = Configuration["Authentication:Google:ClientId"];
                     googleOpts.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                })
+                .AddCookie(options =>
+                {
+                    options.Cookie.SameSite = SameSiteMode.None;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.Cookie.IsEssential = true;
                 });
             // Add application services.
             services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddScoped<RoleManager<AppRole>, RoleManager<AppRole>>();
-
-            services.AddSingleton(Mapper.Configuration);
-            services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IViewRenderService, ViewRenderService>();
@@ -134,6 +151,7 @@ namespace LACoreApp
                 .AddDataAnnotationsLocalization()
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
+
             services.AddRazorPages();
 
             services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
@@ -185,7 +203,6 @@ namespace LACoreApp
             services.AddTransient<IAuthorizationHandler, BaseResourceAuthorizationHandler>();
 
             services.AddSignalR();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -204,15 +221,13 @@ namespace LACoreApp
             }
             app.UseImageResizer();
             app.UseStaticFiles();
-            
-            app.UseMinResponse();
 
+            app.UseMinResponse();
 
             app.UseModifyHtmlMiddleware();
             app.UseRouting();
-            
-            //app.Map("/amp",
-            //    appBuilder => { appBuilder.UseAmpImageMiddleware(); });
+
+            app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSession();
@@ -239,9 +254,8 @@ namespace LACoreApp
                 //});
                 endpoints.MapRazorPages();
                 endpoints.MapHub<TeduHub>("/teduHub");
-
             });
         }
-    }
 
+    }
 }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using LACoreApp.Application.Interfaces;
 using LACoreApp.Application.ViewModels.Blog;
 using LACoreApp.Application.ViewModels.Product;
@@ -17,22 +16,23 @@ namespace LACoreApp.Application.Implementation
 {
     public class BlogCategoryService : IBlogCategoryService
     {
-        private IRepository<BlogCategory, int> _blogCategoryRepository;
-        private IRepository<Blog, int> _blogRepository;
-        private IUnitOfWork _unitOfWork;
-
+        private readonly IRepository<BlogCategory, int> _blogCategoryRepository;
+        private readonly IRepository<Blog, int> _blogRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
         public BlogCategoryService(IRepository<BlogCategory, int> blogCategoryRepository,
             IRepository<Blog, int> blogRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, IMapper mapper)
         {
             _blogCategoryRepository = blogCategoryRepository;
             _blogRepository = blogRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public BlogCategoryViewModel Add(BlogCategoryViewModel blogCategoryVm)
         {
-            var productCategory = Mapper.Map<BlogCategoryViewModel, BlogCategory>(blogCategoryVm);
+            var productCategory = _mapper.Map<BlogCategoryViewModel, BlogCategory>(blogCategoryVm);
             _blogCategoryRepository.Add(productCategory);
             return blogCategoryVm;
         }
@@ -44,28 +44,23 @@ namespace LACoreApp.Application.Implementation
 
         public List<BlogCategoryViewModel> GetAll()
         {
-            return _blogCategoryRepository.FindAll().OrderBy(x => x.ParentId)
-                 .ProjectTo<BlogCategoryViewModel>().ToList();
+            return _mapper.ProjectTo<BlogCategoryViewModel>(_blogCategoryRepository.FindAll().OrderBy(x => x.ParentId)).ToList();
         }
 
         public List<BlogCategoryViewModel> GetAll(string keyword)
         {
             if (!string.IsNullOrEmpty(keyword))
-                return _blogCategoryRepository.FindAll(x => x.Name.Contains(keyword)
+                return _mapper.ProjectTo<BlogCategoryViewModel>(_blogCategoryRepository.FindAll(x => x.Name.Contains(keyword)
                 || x.Description.Contains(keyword))
-                    .OrderBy(x => x.ParentId).ProjectTo<BlogCategoryViewModel>().ToList();
+                    .OrderBy(x => x.ParentId)).ToList();
             else
-                return _blogCategoryRepository.FindAll().OrderBy(x => x.ParentId)
-                    .ProjectTo<BlogCategoryViewModel>()
-                    .ToList();
+                return _mapper.ProjectTo<BlogCategoryViewModel>(_blogCategoryRepository.FindAll().OrderBy(x => x.ParentId)).ToList();
         }
 
         public List<BlogCategoryViewModel> GetAllByParentId(int parentId)
         {
-            return _blogCategoryRepository.FindAll(x => x.Status == Status.Active
-            && x.ParentId == parentId)
-             .ProjectTo<BlogCategoryViewModel>()
-             .ToList();
+            return _mapper.ProjectTo<BlogCategoryViewModel>(_blogCategoryRepository.FindAll(x => x.Status == Status.Active
+            && x.ParentId == parentId)).ToList();
         }
 
         public List<BlogCategoryViewModel> GetAllFlat()
@@ -80,28 +75,27 @@ namespace LACoreApp.Application.Implementation
                 //now get all its children (separate Category in case you need recursion)
                 GetByParentId(blogCategories.ToList(), item, items);
             }
-            return items.AsQueryable().ProjectTo<BlogCategoryViewModel>().ToList();
+            return _mapper.ProjectTo<BlogCategoryViewModel>(items.AsQueryable()).ToList();
         }
 
         public BlogCategoryViewModel GetById(int id)
         {
-            return Mapper.Map<BlogCategory, BlogCategoryViewModel>(_blogCategoryRepository.FindById(id));
+            return _mapper.Map<BlogCategory, BlogCategoryViewModel>(_blogCategoryRepository.FindById(id));
         }
 
         public List<BlogCategoryViewModel> GetHomeCategories(int top)
         {
-            var query = _blogCategoryRepository
+            var query = _mapper.ProjectTo<BlogCategoryViewModel>(_blogCategoryRepository
                 .FindAll(x => x.HomeFlag == true, c => c.Blogs)
                   .OrderBy(x => x.HomeOrder)
-                  .Take(top).ProjectTo<BlogCategoryViewModel>();
+                  .Take(top));
 
             var categories = query.ToList();
             foreach (var category in categories)
             {
-                category.Blogs = _blogRepository
+                category.Blogs = _mapper.ProjectTo<BlogViewModel>(_blogRepository
                     .FindAll(x=>x.CategoryId==category.Id)
-                    .OrderByDescending(o => o.DateCreated).Take(5)
-                    .ProjectTo<BlogViewModel>().ToList();
+                    .OrderByDescending(o => o.DateCreated).Take(5)).ToList();
             }
             return categories;
         }
@@ -125,7 +119,7 @@ namespace LACoreApp.Application.Implementation
 
         public void Update(BlogCategoryViewModel blogCategoryVm)
         {
-            var blogCategory = Mapper.Map<BlogCategoryViewModel, BlogCategory>(blogCategoryVm);
+            var blogCategory = _mapper.Map<BlogCategoryViewModel, BlogCategory>(blogCategoryVm);
             _blogCategoryRepository.Update(blogCategory);
         }
 

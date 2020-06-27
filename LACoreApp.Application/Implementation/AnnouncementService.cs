@@ -9,6 +9,7 @@ using LACoreApp.Application.ViewModels.System;
 using LACoreApp.Data.Entities;
 using LACoreApp.Infrastructure.Interfaces;
 using LACoreApp.Utilities.Dtos;
+using AutoMapper;
 
 namespace LACoreApp.Application.Implementation
 {
@@ -16,16 +17,18 @@ namespace LACoreApp.Application.Implementation
     {
         private IRepository<Announcement, string> _announcementRepository;
         private IRepository<AnnouncementUser, int> _announcementUserRepository;
+        private IMapper _mapper;
 
         private IUnitOfWork _unitOfWork;
 
         public AnnouncementService(IRepository<Announcement, string> announcementRepository,
             IRepository<AnnouncementUser, int> announcementUserRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, IMapper mapper)
         {
             _announcementUserRepository = announcementUserRepository;
             this._announcementRepository = announcementRepository;
             this._unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public PagedResult<AnnouncementViewModel> GetAllUnReadPaging(Guid userId, int pageIndex, int pageSize)
@@ -39,8 +42,8 @@ namespace LACoreApp.Application.Implementation
                         select x;
             int totalRow = query.Count();
 
-            var model = query.OrderByDescending(x => x.DateCreated)
-                .Skip(pageSize * (pageIndex - 1)).Take(pageSize).ProjectTo<AnnouncementViewModel>().ToList();
+            var model = _mapper.ProjectTo<AnnouncementViewModel>(query.OrderByDescending(x => x.DateCreated)
+                .Skip(pageSize * (pageIndex - 1)).Take(pageSize)).ToList();
 
             var paginationSet = new PagedResult<AnnouncementViewModel>
             {

@@ -13,6 +13,9 @@ using LACoreApp.Application.Interfaces;
 using LACoreApp.Data.EF;
 using LACoreApp.Infrastructure.Interfaces;
 using Microsoft.Extensions.Hosting;
+using LACoreApp.Application.AutoMapper;
+using Microsoft.OpenApi.Models;
+using System;
 
 namespace LACoreApp.WebApi
 {
@@ -38,10 +41,8 @@ namespace LACoreApp.WebApi
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             }));
-            services.AddAutoMapper();
 
-            services.AddSingleton(Mapper.Configuration);
-            services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
+            services.AddSingleton(AutoMapperConfig.RegisterMappings().CreateMapper());
             services.AddTransient(typeof(IUnitOfWork), typeof(EFUnitOfWork));
             services.AddTransient(typeof(IRepository<,>), typeof(EFRepository<,>));
 
@@ -52,13 +53,22 @@ namespace LACoreApp.WebApi
 
             services.AddSwaggerGen(s =>
             {
-                s.SwaggerDoc("v1", new Info
+                s.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "TEDU Project",
                     Description = "TEDU API Swagger surface",
-                    Contact = new Contact { Name = "ToanBN", Email = "tedu.international@gmail.com", Url = "http://www.tedu.com.vn" },
-                    License = new License { Name = "MIT", Url = "https://github.com/teduinternational/LACoreApp" }
+                    Contact = new OpenApiContact
+                    {
+                        Name = "ToanBN",
+                        Email = "tedu.international@gmail.com",
+                        Url = new Uri("http://www.tedu.com.vn")
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "MIT",
+                        Url = new Uri("https://github.com/teduinternational/LACoreApp")
+                    }
                 });
             });
         }
@@ -66,7 +76,7 @@ namespace LACoreApp.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.EnvironmentName== Environments.Development)
+            if (env.EnvironmentName == Environments.Development)
             {
                 app.UseDeveloperExceptionPage();
             }

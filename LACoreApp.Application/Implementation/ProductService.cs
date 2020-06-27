@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using OfficeOpenXml;
+﻿using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,19 +12,21 @@ using LACoreApp.Infrastructure.Interfaces;
 using LACoreApp.Utilities.Constants;
 using LACoreApp.Utilities.Dtos;
 using LACoreApp.Utilities.Helpers;
+using AutoMapper;
 
 namespace LACoreApp.Application.Implementation
 {
     public class ProductService : IProductService
     {
-        private IRepository<Product, int> _productRepository;
-        private IRepository<Tag, string> _tagRepository;
-        private IRepository<ProductTag, int> _productTagRepository;
-        private IRepository<ProductQuantity, int> _productQuantityRepository;
-        private IRepository<ProductImage, int> _productImageRepository;
-        private IRepository<WholePrice, int> _wholePriceRepository;
+        private readonly IRepository<Product, int> _productRepository;
+        private readonly IRepository<Tag, string> _tagRepository;
+        private readonly IRepository<ProductTag, int> _productTagRepository;
+        private readonly IRepository<ProductQuantity, int> _productQuantityRepository;
+        private readonly IRepository<ProductImage, int> _productImageRepository;
+        private readonly IRepository<WholePrice, int> _wholePriceRepository;
 
-        private IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public ProductService(IRepository<Product, int> productRepository,
             IRepository<Tag, string> tagRepository,
@@ -34,7 +34,8 @@ namespace LACoreApp.Application.Implementation
             IRepository<ProductImage, int> productImageRepository,
             IRepository<WholePrice, int> wholePriceRepository,
         IUnitOfWork unitOfWork,
-        IRepository<ProductTag, int> productTagRepository)
+        IRepository<ProductTag, int> productTagRepository,
+        IMapper mapper)
         {
             _productRepository = productRepository;
             _tagRepository = tagRepository;
@@ -43,6 +44,7 @@ namespace LACoreApp.Application.Implementation
             _wholePriceRepository = wholePriceRepository;
             _productImageRepository = productImageRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public ProductViewModel Add(ProductViewModel productVm)
@@ -71,7 +73,7 @@ namespace LACoreApp.Application.Implementation
                     };
                     productTags.Add(productTag);
                 }
-                var product = Mapper.Map<ProductViewModel, Product>(productVm);
+                var product = _mapper.Map<ProductViewModel, Product>(productVm);
                 foreach (var productTag in productTags)
                 {
                     product.ProductTags.Add(productTag);
@@ -108,7 +110,7 @@ namespace LACoreApp.Application.Implementation
 
         public List<ProductViewModel> GetAll()
         {
-            return _productRepository.FindAll(x => x.ProductCategory).ProjectTo<ProductViewModel>().ToList();
+            return _mapper.ProjectTo<ProductViewModel>(_productRepository.FindAll(x => x.ProductCategory)).ToList();
         }
 
         public PagedResult<ProductViewModel> GetAllPaging(int? categoryId, string keyword, int page, int pageSize)
@@ -124,7 +126,7 @@ namespace LACoreApp.Application.Implementation
             query = query.OrderByDescending(x => x.DateCreated)
                 .Skip((page - 1) * pageSize).Take(pageSize);
 
-            var data = query.ProjectTo<ProductViewModel>().ToList();
+            var data = _mapper.ProjectTo<ProductViewModel>(query).ToList();
 
             var paginationSet = new PagedResult<ProductViewModel>()
             {
@@ -138,12 +140,12 @@ namespace LACoreApp.Application.Implementation
 
         public ProductViewModel GetById(int id)
         {
-            return Mapper.Map<Product, ProductViewModel>(_productRepository.FindById(id));
+            return _mapper.Map<Product, ProductViewModel>(_productRepository.FindById(id));
         }
 
         public List<ProductQuantityViewModel> GetQuantities(int productId)
         {
-            return _productQuantityRepository.FindAll(x => x.ProductId == productId).ProjectTo<ProductQuantityViewModel>().ToList();
+            return _mapper.ProjectTo<ProductQuantityViewModel>(_productQuantityRepository.FindAll(x => x.ProductId == productId)).ToList();
         }
 
         public void ImportExcel(string filePath, int categoryId)
@@ -218,7 +220,7 @@ namespace LACoreApp.Application.Implementation
                 }
             }
 
-            var product = Mapper.Map<ProductViewModel, Product>(productVm);
+            var product = _mapper.Map<ProductViewModel, Product>(productVm);
             foreach (var productTag in productTags)
             {
                 product.ProductTags.Add(productTag);
@@ -228,8 +230,7 @@ namespace LACoreApp.Application.Implementation
 
         public List<ProductImageViewModel> GetImages(int productId)
         {
-            return _productImageRepository.FindAll(x => x.ProductId == productId)
-                .ProjectTo<ProductImageViewModel>().ToList();
+            return _mapper.ProjectTo<ProductImageViewModel>(_productImageRepository.FindAll(x => x.ProductId == productId)).ToList();
         }
 
         public void AddImages(int productId, string[] images)
@@ -263,41 +264,39 @@ namespace LACoreApp.Application.Implementation
 
         public List<WholePriceViewModel> GetWholePrices(int productId)
         {
-            return _wholePriceRepository.FindAll(x => x.ProductId == productId).ProjectTo<WholePriceViewModel>().ToList();
+            return _mapper.ProjectTo<WholePriceViewModel>(_wholePriceRepository.FindAll(x => x.ProductId == productId)).ToList();
         }
 
         public List<ProductViewModel> GetLastest(int top)
         {
-            return _productRepository.FindAll(x => x.Status == Status.Active).OrderByDescending(x => x.DateCreated)
-                .Take(top).ProjectTo<ProductViewModel>().ToList();
+            return _mapper.ProjectTo<ProductViewModel>(_productRepository.FindAll(x => x.Status == Status.Active)
+                                                                         .OrderByDescending(x => x.DateCreated)
+                                                                         .Take(top)).ToList();
         }
 
         public List<ProductViewModel> GetHotProduct(int top)
         {
-            return _productRepository.FindAll(x => x.Status == Status.Active && x.HotFlag == true)
+            return _mapper.ProjectTo<ProductViewModel>(_productRepository.FindAll(x => x.Status == Status.Active && x.HotFlag == true)
                 .OrderByDescending(x => x.DateCreated)
-                .Take(top)
-                .ProjectTo<ProductViewModel>()
+                .Take(top))
                 .ToList();
         }
 
         public List<ProductViewModel> GetRelatedProducts(int id, int top)
         {
             var product = _productRepository.FindById(id);
-            return _productRepository.FindAll(x => x.Status == Status.Active
+            return _mapper.ProjectTo<ProductViewModel>(_productRepository.FindAll(x => x.Status == Status.Active
                 && x.Id != id && x.CategoryId == product.CategoryId)
             .OrderByDescending(x => x.DateCreated)
-            .Take(top)
-            .ProjectTo<ProductViewModel>()
+            .Take(top))
             .ToList();
         }
 
         public List<ProductViewModel> GetUpsellProducts(int top)
         {
-            return _productRepository.FindAll(x => x.PromotionPrice != null)
+            return _mapper.ProjectTo<ProductViewModel>(_productRepository.FindAll(x => x.PromotionPrice != null)
                .OrderByDescending(x => x.DateModified)
-               .Take(top)
-               .ProjectTo<ProductViewModel>().ToList();
+               .Take(top)).ToList();
         }
 
         public List<TagViewModel> GetProductTags(int productId)

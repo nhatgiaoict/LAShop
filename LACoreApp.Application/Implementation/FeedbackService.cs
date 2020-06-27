@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using LACoreApp.Application.Interfaces;
@@ -8,24 +6,28 @@ using LACoreApp.Application.ViewModels.Common;
 using LACoreApp.Data.Entities;
 using LACoreApp.Infrastructure.Interfaces;
 using LACoreApp.Utilities.Dtos;
+using AutoMapper;
 
 namespace LACoreApp.Application.Implementation
 {
     public class FeedbackService : IFeedbackService
     {
-        private IRepository<Feedback, int> _feedbackRepository;
-        private IUnitOfWork _unitOfWork;
+        private readonly IRepository<Feedback, int> _feedbackRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public FeedbackService(IRepository<Feedback, int> feedbackRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IMapper mapper)
         {
             _feedbackRepository = feedbackRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public void Add(FeedbackViewModel feedbackVm)
         {
-            var page = Mapper.Map<FeedbackViewModel, Feedback>(feedbackVm);
+            var page = _mapper.Map<FeedbackViewModel, Feedback>(feedbackVm);
             _feedbackRepository.Add(page);
         }
 
@@ -41,7 +43,7 @@ namespace LACoreApp.Application.Implementation
 
         public List<FeedbackViewModel> GetAll()
         {
-            return _feedbackRepository.FindAll().ProjectTo<FeedbackViewModel>().ToList();
+            return _mapper.ProjectTo<FeedbackViewModel>(_feedbackRepository.FindAll()).ToList();
         }
 
         public PagedResult<FeedbackViewModel> GetAllPaging(string keyword, int page, int pageSize)
@@ -57,7 +59,7 @@ namespace LACoreApp.Application.Implementation
 
             var paginationSet = new PagedResult<FeedbackViewModel>()
             {
-                Results = data.ProjectTo<FeedbackViewModel>().ToList(),
+                Results = _mapper.ProjectTo<FeedbackViewModel>(data).ToList(),
                 CurrentPage = page,
                 RowCount = totalRow,
                 PageSize = pageSize
@@ -68,7 +70,7 @@ namespace LACoreApp.Application.Implementation
 
         public FeedbackViewModel GetById(int id)
         {
-            return Mapper.Map<Feedback, FeedbackViewModel>(_feedbackRepository.FindById(id));
+            return _mapper.Map<Feedback, FeedbackViewModel>(_feedbackRepository.FindById(id));
         }
 
         public void SaveChanges()
@@ -78,7 +80,7 @@ namespace LACoreApp.Application.Implementation
 
         public void Update(FeedbackViewModel feedbackVm)
         {
-            var page = Mapper.Map<FeedbackViewModel, Feedback>(feedbackVm);
+            var page = _mapper.Map<FeedbackViewModel, Feedback>(feedbackVm);
             _feedbackRepository.Update(page);
         }
     }

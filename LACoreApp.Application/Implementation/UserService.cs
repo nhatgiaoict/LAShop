@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,15 +9,18 @@ using LACoreApp.Application.Interfaces;
 using LACoreApp.Application.ViewModels.System;
 using LACoreApp.Data.Entities;
 using LACoreApp.Utilities.Dtos;
+using AutoMapper;
 
 namespace LACoreApp.Application.Implementation
 {
     public class UserService : IUserService
     {
         private readonly UserManager<AppUser> _userManager;
-        public UserService(UserManager<AppUser> userManager)
+        private readonly IMapper _mapper;
+        public UserService(UserManager<AppUser> userManager,IMapper mapper)
         {
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         public async Task<bool> AddAsync(AppUserViewModel userVm)
@@ -52,7 +53,7 @@ namespace LACoreApp.Application.Implementation
 
         public async Task<List<AppUserViewModel>> GetAllAsync()
         {
-            return await _userManager.Users.ProjectTo<AppUserViewModel>().ToListAsync();
+            return await _mapper.ProjectTo<AppUserViewModel>(_userManager.Users).ToListAsync();
         }
 
         public PagedResult<AppUserViewModel> GetAllPagingAsync(string keyword, int page, int pageSize)
@@ -95,7 +96,7 @@ namespace LACoreApp.Application.Implementation
         {
             var user = await _userManager.FindByIdAsync(id);
             var roles = await _userManager.GetRolesAsync(user);
-            var userVm = Mapper.Map<AppUser, AppUserViewModel>(user);
+            var userVm = _mapper.Map<AppUser, AppUserViewModel>(user);
             userVm.Roles = roles.ToList();
             return userVm;
         }
